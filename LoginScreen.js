@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     width: width,
-    height: height,
-    padding: 20,
+    height: height*0.8  ,
+    padding: 10,
   },
     title: {
     color: '#333',
@@ -57,6 +57,7 @@ const styles = StyleSheet.create({
     marginBottom: 20
   },
   input: {
+    width:width * 0.8, // Set the width of the input to 80% of the screen width
     height: 40,
     backgroundColor: '#fff',
     color: '#333',

@@ -6,6 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 import FeedScreen from './FeedScreen.js';
 import InteractScreen from './InteractScreen';
+import TaskScreen from './TaskScreen';
 
 
 
@@ -24,7 +25,7 @@ function Profile() {
 
 
 
-function HomeScreen() {
+function MainScreenToFinale() {
 
  
   const Tab = createBottomTabNavigator();
@@ -32,7 +33,7 @@ function HomeScreen() {
   return (
 
     <Tab.Navigator
-      initialRouteName="FeedScreen"
+      initialRouteName="TaskScreen"
       screenOptions={{
         tabBarActiveTintColor: '#e91e63',
       }}
@@ -48,8 +49,8 @@ function HomeScreen() {
         }}
       />
       <Tab.Screen
-        name="InteractScreen"
-        component={InteractScreen}
+        name="TaskScreen"
+        component={TaskScreen}
         options={{
           tabBarLabel: 'Updates',
           tabBarIcon: ({ color, size }) => (
@@ -75,4 +76,4 @@ function HomeScreen() {
 }
 
 
-export default HomeScreen;
+export default MainScreenToFinale;

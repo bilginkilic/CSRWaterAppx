@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { View } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
@@ -7,6 +6,7 @@ import LoginScreen from './LoginScreen';
 import MainScreen from './MainScreen';
 import SplashScreen from './SplashScreen';
 import { AuthContext } from './AuthContext';
+import MainScreenToFinale from './MainScreenToFinale';
 
 
 
@@ -23,11 +23,21 @@ function App() {
             isLoading: false,
           };
         case 'SIGN_IN':
+           
           return {
+           
             ...prevState,
             isSignout: false,
             userToken: action.token,
+            hasSurvey:false
           };
+          case 'TAKE_TEST':
+            console.log(prevState)
+            return {
+              ...prevState,
+              hasSurvey:true
+              
+            };
         case 'SIGN_OUT':
           return {
             ...prevState,
@@ -40,6 +50,7 @@ function App() {
       isLoading: true,
       isSignout: false,
       userToken: null,
+      hasSurvey :false
     }
   );
 
@@ -66,6 +77,7 @@ function App() {
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
+      takeTest: () => dispatch({ type: 'TAKE_TEST' }),
       signUp: async (data) => {
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
@@ -92,14 +104,23 @@ function App() {
               }}
             />
           ) : (
-            // Show the main screen if the user is signed in
+            // Show the main screen if the user is signed in - no survey
+           ( state.hasSurvey ?
             <Stack.Screen
-              name="Main"
-              component={MainScreen}
+              name="MainScreenToFinale"
+              component={MainScreenToFinale}
               options={{
-                title: 'Welcome',
+                title: 'WATER APP',
               }}
-            />
+            />:
+            <Stack.Screen
+            name="Main"
+            component={MainScreen}
+            options={{
+              title: 'WELCOME TO WATER APP',
+            }}
+          />
+           )
           )}
         </Stack.Navigator>
       </NavigationContainer>
