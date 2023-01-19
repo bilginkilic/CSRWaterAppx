@@ -5,13 +5,14 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import FeedScreen from './FeedScreen.js';
-import InteractScreen from './InteractScreen';
+
 import TaskScreen from './TaskScreen';
 
-
+MaterialCommunityIcons.loadFont(); 
 
 
 function Profile() {
+  
   const { signOut } = React.useContext(AuthContext);
   return (
   <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
