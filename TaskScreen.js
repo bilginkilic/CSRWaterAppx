@@ -6,24 +6,24 @@ const TaskScreen = () => {
     const [completedTasks, setCompletedTasks] = useState([]);
     const tasks = [
         {
-            title: 'Use public transport or carpool',
-            description: 'Taking public transport or carpooling instead of driving alone is a great way to reduce your carbon footprint.',
-            image: require('./assets/water-meter.png'),
+            title: 'Dont let the water run while brushing your teeth or shaving',
+            description: 'It is easy to waste a lot of water while brushing your teeth or shaving. By turning off the water while you are brushing your teeth or shaving, you can save around 18.9 liters of water per day.',
+            image: require('./assets/5.jpg'),
         },
         {
             title: 'Reduce meat consumption',
             description: 'Eating less meat can significantly reduce your carbon footprint as the meat industry is a major contributor to greenhouse gas emissions.',
-            image: require('./assets/water-meter.png'),
+            image: require('./assets/5.jpg'),
         },
         {
             title: 'Unplug electronics when not in use',
             description: 'Leaving electronics plugged in when not in use wastes energy and contributes to carbon emissions.',
-            image: require('./assets/water-meter.png'),
+            image: require('./assets/5.jpg'),
         },
         {
             title: 'Use a reusable water bottle',
             description: 'Using a reusable water bottle instead of disposable plastic bottles can help reduce plastic waste and carbon emissions.',
-            image: require('./assets/water-meter.png'),
+            image: require('./assets/5.jpg'),
         },
         {
             title: 'Plant a tree',
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
         margin: 10,
     },
     completeButton: {
-        backgroundColor: '#e91e63',
+        backgroundColor: 'red',
         padding: 10,
         borderRadius: 5,
         alignItems: 'center',

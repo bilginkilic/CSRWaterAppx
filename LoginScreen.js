@@ -68,7 +68,7 @@ const styles = StyleSheet.create({
   
  
   buttonContainer: {
-    backgroundColor: 'rgb(139, 0, 0)' ,// 'rgba(244, 67, 54, 1)', // Nice red color
+    backgroundColor: 'red' ,// 'rgba(244, 67, 54, 1)', // Nice red color
     paddingVertical: 15,
     borderRadius: 5,
     width:width*0.8,

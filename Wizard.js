@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { AuthContext } from './AuthContext';
-import MainScreen from './MainScreen';
+ 
 
 const Wizard = () => {
+    
     const { takeTest } = React.useContext(AuthContext);
    
 
@@ -55,8 +56,9 @@ const Wizard = () => {
 
     const saveAnswers = async () => {
         try {
-            await AsyncStorage.setItem('answers', JSON.stringify(answers));
-            alert('Answers saved successfully!');
+          //  await AsyncStorage.setItem('answers', JSON.stringify(answers));
+            takeTest();
+           // alert('Answers saved successfully!');
         } catch (error) {
             console.log(error);
             alert('Failed to save answers. Please try again.');
@@ -85,63 +87,70 @@ const Wizard = () => {
             ) : (
                 <View>
                     <Text style={styles.finalText}>Thank you for taking the survey!</Text>
+                    
                     <TouchableOpacity style={styles.saveButton} onPress={saveAnswers}>
-                        <Text style={styles.saveButtonText}>Save answers</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.finalText} onPress={takeTest}>
-                    <Text style={styles.startTaskButtonText}>Start Tasks</Text>
+                    <Text style={styles.saveButtonText}>Start Tasks Now</Text>
                 </TouchableOpacity>
                 </View>
             )}
         </View>
     );
 }
-
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
+        padding: 30,
     },
-    question: {
-        fontSize: 18,
+    questionText: {
+        fontSize: 22,
         margin: 10,
         textAlign: 'center',
     },
-    answerContainer: {
-        flexDirection: 'row',
+    optionsContainer: {
+        flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         margin: 10,
-        width: '80%',
+        width: '100%',
     },
-    answerText: {
+    optionButton: {
+        backgroundColor: 'red',
+        padding: 20,
+        margin:10,
+        borderRadius: 10,
+        width: '70%',
+        alignItems: 'center',
+    },
+    optionText: {
+        color: 'white',
         fontSize: 18,
+        fontWeight: 'bold'
     },
-    answerButton: {
-        backgroundColor: '#e91e63',
-        padding: 10,
-        borderRadius: 5,
-    },
-    answerButtonText: {
-        color: '#fff',
-        fontWeight: 'bold',
-    },
-    progressBarContainer: {
+    finalText: {
+        fontSize: 22,
         margin: 10,
-        width: '80%',
-        height: 20,
-        borderWidth: 1,
-        borderColor: '#e91e63',
-        borderRadius: 5,
+        textAlign: 'center',
     },
-    progressBar: {
-        backgroundColor: '#e91e63',
-        height: '100%',
+    saveButton: {
+        backgroundColor: 'red',
+        padding: 20,
+        margin:10,
+        borderRadius: 10,
+        width: '70%',
+        alignItems: 'center',
+    },
+    saveButtonText: {
+        color: 'white',
+        fontSize: 18,
+        fontWeight: 'bold'
     },
 });
+
+
+ 
 
 const questions = [
     {
@@ -202,64 +211,7 @@ function WaterConservationSurvey() {
     };
 
     
-    const styles = StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: '#fff',
-            alignItems: 'center',
-            justifyContent: 'center',
-        },
-        questionText: {
-            fontSize: 18,
-            margin: 10,
-            textAlign: 'center',
-        },
-        optionsContainer: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            margin: 10,
-            width: '80%',
-        },
-        optionButton: {
-            backgroundColor: '#e91e63',
-            padding: 10,
-            borderRadius: 5,
-        },
-        optionText: {
-            color: '#fff',
-            fontWeight: 'bold',
-        },
-        finalText: {
-            fontSize: 18,
-            margin: 10,
-            textAlign: 'center',
-        },
-        saveButton: {
-            backgroundColor: '#e91e63',
-            padding: 10,
-            borderRadius: 5,
-            margin: 10,
-        },
-        saveButtonText: {
-            color: '#fff',
-            fontWeight: 'bold',
-            textAlign: 'center',
-        },
-
-        startTaskButton: {
-            backgroundColor: '#e91e63',
-            padding: 10,
-            borderRadius: 5,
-            alignItems: 'center',
-            marginTop: 20,
-        },
-        startTaskButtonText: {
-            color: '#fff',
-            fontWeight: 'bold',
-        }
-
-    });
+   
 
 
 };

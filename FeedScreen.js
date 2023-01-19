@@ -17,20 +17,20 @@ const FeedScreen = () => {
             <View style={{ flex: 2, justifyContent: 'center' }}>
                 
                     <View style={{ flex: 1, alignItems: 'center' }}>
-                        <Image source={require('./assets/water-drop.png')} style={{ width: 100, height: 100 }} />
+                        <Image source={require('./assets/water-drop.png')} style={{ width: 50, height: 50 }} />
                         <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 10 }}>
                             Learn how to save water with our tips and tricks
                         </Text>
                     </View>
                     <View style={{ flex: 1, alignItems: 'center' }}>
-                        <Image source={require('./assets/water-meter.png')} style={{ width: 100, height: 100 }} />
+                        <Image source={require('./assets/water-meter.png')} style={{ width: 50, height: 50 }} />
 
                         <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 10 }}>
                             Take our water consumption survey and track your progress
                         </Text>
                     </View>
                     <View style={{ flex: 1, alignItems: 'center' }}>
-                        <Image source={require('./assets/badge.png')} style={{ width: 100, height: 100 }} />
+                        <Image source={require('./assets/badge.png')} style={{ width: 50, height: 50 }} />
                         <Text style={{ fontSize: 18, textAlign: 'center', marginTop: 10 }}>
                             Complete tasks and earn badges for your water conservation efforts
                         </Text>
