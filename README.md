@@ -1,4 +1,4 @@
-# CSRWaterAppx
+# Water APP 
 # The introduction
 Welcome to the Water app! This app is designed to help you learn how to save water in your daily life. We understand that small changes can make a big difference when it comes to water conservation, and that's why we've created this app to help you take action.
 Before you get started, we would like to ask you a few questions about your current water consumption habits. This survey will help us understand how you currently use water, and it will also serve as a benchmark to measure the impact of the tasks we will be suggesting later on.
