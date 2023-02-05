@@ -35,37 +35,46 @@ function HomeScreen() {
       initialRouteName="FeedScreen"
       screenOptions={{
         tabBarActiveTintColor: '#e91e63',
+        headerShown: false
+       
       }}
+       
     >
       <Tab.Screen
-        name="FeedScreen"
+        name="About"
         component={FeedScreen}
         options={{
-          tabBarLabel: 'FeedScreen',
+           tabBarLabel: 'About',
+           tabBarVisible: false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
-        }}
+         
+        }
+        
+      } 
       />
       <Tab.Screen
-        name="InteractScreen"
+        name="Task"
         component={InteractScreen}
         options={{
-          tabBarLabel: 'Updates',
+          tabBarLabel: 'Tasks',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="bell" color={color} size={size} />
           ),
           tabBarBadge: 3,
+          tabBarVisible: false,
         }}
       />
       <Tab.Screen
-        name="Profile"
+        name="Porfile"
         component={Profile}
         options={{
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
+          tabBarVisible: false,
         }}
       />
     </Tab.Navigator>
