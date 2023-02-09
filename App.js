@@ -1,18 +1,22 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
 import LoginScreen from './LoginScreen';
 import MainScreen from './MainScreen';
 import SplashScreen from './SplashScreen';
 import { AuthContext } from './AuthContext';
 import MainScreenToFinale from './MainScreenToFinale';
+import { Amplify } from 'aws-amplify';
+import config from './src/aws-exports'
+
+ 
 
 
 
 const Stack = createStackNavigator();
 
 function App() {
+  Amplify.configure(config)
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -23,21 +27,21 @@ function App() {
             isLoading: false,
           };
         case 'SIGN_IN':
-           
+
           return {
-           
+
             ...prevState,
             isSignout: false,
             userToken: action.token,
-            hasSurvey:false
+            hasSurvey: false
           };
-          case 'TAKE_TEST':
-            console.log(prevState)
-            return {
-              ...prevState,
-              hasSurvey:true
-              
-            };
+        case 'TAKE_TEST':
+          console.log(prevState)
+          return {
+            ...prevState,
+            hasSurvey: true
+
+          };
         case 'SIGN_OUT':
           return {
             ...prevState,
@@ -50,7 +54,7 @@ function App() {
       isLoading: true,
       isSignout: false,
       userToken: null,
-      hasSurvey :false
+      hasSurvey: false
     }
   );
 
@@ -74,7 +78,13 @@ function App() {
   const authContext = React.useMemo(
     () => ({
       signIn: async (data) => {
-        dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
+        
+        if(data.userToken !=''){
+          dispatch({ type: 'SIGN_IN', token: data.userToken });
+     
+        }
+        
+     
       },
       signOut: () => dispatch({ type: 'SIGN_OUT' }),
       takeTest: () => dispatch({ type: 'TAKE_TEST' }),
@@ -85,9 +95,9 @@ function App() {
     []
   );
 
-   
 
-      return (
+
+  return (
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
         <Stack.Navigator>
@@ -105,22 +115,22 @@ function App() {
             />
           ) : (
             // Show the main screen if the user is signed in - no survey
-           ( state.hasSurvey ?
-            <Stack.Screen
-              name="MainScreenToFinale"
-              component={MainScreenToFinale}
-              options={{
-                title: 'WATER APP',
-              }}
-            />:
-            <Stack.Screen
-            name="Main"
-            component={MainScreen}
-            options={{
-              title: 'WELCOME TO WATER APP',
-            }}
-          />
-           )
+            (state.hasSurvey ?
+              <Stack.Screen
+                name="MainScreenToFinale"
+                component={MainScreenToFinale}
+                options={{
+                  title: 'WATER APP',
+                }}
+              /> :
+              <Stack.Screen
+                name="Main"
+                component={MainScreen}
+                options={{
+                  title: 'WELCOME TO WATER APP',
+                }}
+              />
+            )
           )}
         </Stack.Navigator>
       </NavigationContainer>
