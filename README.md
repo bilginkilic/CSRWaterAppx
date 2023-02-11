@@ -30,5 +30,10 @@ By making small changes in your daily routine, you can make a big impact on wate
 
 21.Educating others: Spreading awareness about the negative effects of plastic bottles on the environment and encouraging others to reduce their usage can make a big impact.
 —
-
+# About the app tech
  
+This is a mobile application that provides daily tasks for the user to do to reduce their carbon footprint. The app features a task screen that displays a task with a title, description, and image, and a completion button. Completed tasks are stored in the local storage of the app using AsyncStorage.
+
+The app also features a profile screen that displays the username of the logged-in user and a sign-out button. Users can sign in using the AuthContext, which authenticates users with a username and password.
+
+The app is built with React Native and uses several libraries, including React Navigation for screen navigation, React Native Vector Icons for displaying icons, and AsyncStorage for local storage. It follows a simple, clean architecture and is designed to be easily extensible with new features.
