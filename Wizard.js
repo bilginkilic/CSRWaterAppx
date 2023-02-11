@@ -1,70 +1,87 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
+import { AsyncStorage } from 'react-native';
 import { AuthContext } from './AuthContext';
- 
+import { useLocalStorage } from './useLocalStorage';
+
 
 const Wizard = () => {
-    
     const { takeTest } = React.useContext(AuthContext);
-   
-
-    const [questionIndex, setQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState([]);
-    const questions = [
-        {
-            text: 'How often do you take short showers?',
-            options: [
-                { text: 'Always', value: 5 },
-                { text: 'Sometimes', value: 3 },
-                { text: 'Rarely', value: 1 },
-            ],
-        },
-        {
-            text: 'Do you turn off the faucet while brushing your teeth?',
-            options: [
-                { text: 'Yes', value: 5 },
-                { text: 'No', value: 1 },
-            ],
-        },
-        {
-            text: 'Do you use a reusable water bottle?',
-            options: [
-                { text: 'Yes', value: 5 },
-                { text: 'No', value: 1 },
-            ],
-        },
-        {
-            text: 'Do you fix leaks promptly?',
-            options: [
-                { text: 'Yes', value: 5 },
-                { text: 'No', value: 1 },
-            ],
-        },
-        {
-            text: 'Do you use a low-flow toilet?',
-            options: [
-                { text: 'Yes', value: 5 },
-                { text: 'No', value: 1 },
-            ],
-        },
+    //const [questionIndex, setQuestionIndex] = useState(0);
+    const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
+  //  const [answers, setAnswers] = useState([]);
+    const [answers, setAnswers] = useLocalStorage('answers', []);
+  //  const [hasSurvey, setHasSurvey] = useLocalStorage('hasSurvey', false);
+    const questions = [{
+        text: 'How often do you take short showers?', options: [{ text: 'Always', value: 5 }, { text: 'Sometimes', value: 3 }, { text: 'Rarely', value: 1 },],
+    },
+    {
+        text: 'Do you turn off the faucet while brushing your teeth?',
+        options: [
+            { text: 'Yes', value: 5 },
+            { text: 'No', value: 1 },
+        ],
+    },
+    {
+        text: 'Do you use a reusable water bottle?',
+        options: [
+            { text: 'Yes', value: 5 },
+            { text: 'No', value: 1 },
+        ],
+    },
+    {
+        text: 'Do you fix leaks promptly?',
+        options: [
+            { text: 'Yes', value: 5 },
+            { text: 'No', value: 1 },
+        ],
+    },
+    {
+        text: 'Do you use a low-flow toilet?',
+        options: [
+            { text: 'Yes', value: 5 },
+            { text: 'No', value: 1 },
+        ],
+    },
     ];
+
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const answersJson = await AsyncStorage.getItem('answers');
+                // const takenJson = await AsyncStorage.getItem('isTaken');
+                if (answersJson) {
+                    const answers = JSON.parse(answersJson);
+                    setAnswers(answers);
+                    setQuestionIndex(answers.length);
+                }
+                // if (takenJson) {
+                //     const taken = JSON.parse(takenJson);
+                //     setHasSurvey(taken);
+                // }
+            } catch (error) {
+                console.error(error);
+            }
+        };
+        loadData();
+    }, []);
 
     const handleSelectOption = (value) => {
         setAnswers([...answers, value]);
         setQuestionIndex(questionIndex + 1);
-    }
+    };
 
     const saveAnswers = async () => {
         try {
-          //  await AsyncStorage.setItem('answers', JSON.stringify(answers));
+            await AsyncStorage.setItem('answers', JSON.stringify(answers));
+            await AsyncStorage.setItem('isTaken', JSON.stringify(true));
             takeTest();
-           // alert('Answers saved successfully!');
+            console.log(answers);
         } catch (error) {
             console.log(error);
             alert('Failed to save answers. Please try again.');
-          
         }
-    }
+    };
 
     const currentQuestion = questions[questionIndex];
     return (
@@ -87,15 +104,14 @@ const Wizard = () => {
             ) : (
                 <View>
                     <Text style={styles.finalText}>Thank you for taking the survey!</Text>
-                    
                     <TouchableOpacity style={styles.saveButton} onPress={saveAnswers}>
-                    <Text style={styles.saveButtonText}>Start Tasks Now</Text>
-                </TouchableOpacity>
+                        <Text style={styles.saveButtonText}>Start   </Text>       
+                        </TouchableOpacity>
                 </View>
             )}
         </View>
     );
-}
+};
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -119,7 +135,7 @@ const styles = StyleSheet.create({
     optionButton: {
         backgroundColor: 'red',
         padding: 20,
-        margin:10,
+        margin: 10,
         borderRadius: 10,
         width: '70%',
         alignItems: 'center',
@@ -137,7 +153,7 @@ const styles = StyleSheet.create({
     saveButton: {
         backgroundColor: 'red',
         padding: 20,
-        margin:10,
+        margin: 10,
         borderRadius: 10,
         width: '70%',
         alignItems: 'center',
@@ -148,72 +164,5 @@ const styles = StyleSheet.create({
         fontWeight: 'bold'
     },
 });
-
-
- 
-
-const questions = [
-    {
-        id: 1,
-        question: 'Do you take short showers?',
-        answers: [
-            { id: 1, answer: 'Yes' },
-            { id: 2, answer: 'No' },
-        ],
-    },
-    {
-        id: 2,
-        question: 'Do you turn off the tap while brushing your teeth?',
-        answers: [
-            { id: 1, answer: 'Yes' },
-            { id: 2, answer: 'No' },
-        ],
-    },
-    {
-        id: 3,
-        question: 'Do you use a low-flow showerhead?',
-        answers: [
-            { id: 1, answer: 'Yes' },
-            { id: 2, answer: 'No' },
-        ],
-    },
-    {
-        id: 4,
-        question: 'Do you fix any leaks in your home?',
-        answers: [
-            { id: 1, answer: 'Yes' },
-            { id: 2, answer: 'No' },
-        ],
-    },
-    {
-        id: 5,
-        question: 'Do you use a water-saving toilet?',
-        answers: [
-            { id: 1, answer: 'Yes' },
-            { id: 2, answer: 'No' },
-        ],
-    },
-];
-
-function WaterConservationSurvey() {
-    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-    const [answers, setAnswers] = useState([]);
-
-    const currentQuestion = questions[currentQuestionIndex];
-
-    const handleAnswerPress = (answerId) => {
-        setAnswers([...answers, answerId]);
-        setCurrentQuestionIndex(currentQuestionIndex + 1);
-    };
-
-    const handleSaveAnswers = () => {
-        // Save answers to local storage
-    };
-
-    
-   
-
-
-};
 
 export default Wizard;

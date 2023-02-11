@@ -3,6 +3,7 @@ import { Button, Text, View, Image } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import ProfileScreen from './ProfileScreen';
 
 import FeedScreen from './FeedScreen.js';
 
@@ -11,17 +12,7 @@ import TaskScreen from './TaskScreen';
 MaterialCommunityIcons.loadFont(); 
 
 
-function Profile() {
-  
-  const { signOut } = React.useContext(AuthContext);
-  return (
-  <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-  <Text>Profile!</Text>
-  <Button title="Sign Out" onPress={signOut} />
-  </View>
-  );
-  }
-
+ 
  
 
 
@@ -43,6 +34,7 @@ function MainScreenToFinale() {
         name="FeedScreen"
         component={FeedScreen}
         options={{
+          headerShown: false,
           tabBarLabel: 'FeedScreen',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
@@ -53,7 +45,8 @@ function MainScreenToFinale() {
         name="TaskScreen"
         component={TaskScreen}
         options={{
-          tabBarLabel: 'Updates',
+          headerShown: false,
+          tabBarLabel: 'Tasks',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="bell" color={color} size={size} />
           ),
@@ -62,8 +55,9 @@ function MainScreenToFinale() {
       />
       <Tab.Screen
         name="Profile"
-        component={Profile}
+        component={ProfileScreen}
         options={{
+          headerShown: false,
           tabBarLabel: 'Profile',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />

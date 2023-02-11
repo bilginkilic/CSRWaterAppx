@@ -2,13 +2,26 @@ import * as React from 'react';
 import { Text, TextInput, TouchableOpacity, StyleSheet, Dimensions, Button, View, Alert } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { Auth } from 'aws-amplify';
+import { useLocalStorage } from './useLocalStorage';
+
 const { width, height } = Dimensions.get('window');
 
 const LoginScreen = () => {
-  const [username, setUsername] = React.useState('');
+ // const [username, setUsername] = React.useState('');
+  const [username, setUsername] = useLocalStorage('username', '');
   const [password, setPassword] = React.useState('');
 
-
+  const handleSignInDev = async () => {
+    try {
+       
+        signIn({ userToken:'OK' });
+    
+    
+    } catch (error) {
+      Alert.alert('OOPSS',error.message)
+      //console.log('error signing in: ', error);
+    }
+  };
   const handleSignIn = async () => {
     try {
       if(username=='' || password==''){
@@ -49,7 +62,7 @@ const LoginScreen = () => {
         value={password}
         onChangeText={setPassword}
       />
-      <TouchableOpacity style={styles.buttonContainer} onPress={handleSignIn}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={handleSignInDev}>
         <View>
           <Text style={styles.buttonText}>LOGIN</Text>
         </View>
