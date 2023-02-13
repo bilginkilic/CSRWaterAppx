@@ -10,8 +10,8 @@ function ProfileScreen() {
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Hi {username}!</Text>
       <Button title="Sign Out" onPress={signOut} />
-      <Button title="Clear Storage" onPress={() => clearStorage()} />  
-      <Button title="Show Storage" onPress={() => showAllLocalStorage()} />  
+      {/* <Button title="Clear Storage" onPress={() => clearStorage()} />  
+      <Button title="Show Storage" onPress={() => showAllLocalStorage()} />   */}
     </View>
   );
 }

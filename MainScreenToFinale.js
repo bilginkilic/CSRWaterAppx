@@ -56,7 +56,7 @@ function MainScreenToFinale() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="bell" color={color} size={size} />
           ),
-          tabBarBadge: 3,
+          tabBarBadge: 21,
         }}
       />
       <Tab.Screen
