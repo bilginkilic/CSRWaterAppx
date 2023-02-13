@@ -35,5 +35,17 @@ export const useLocalStorage = (key, initialValue) => {
     }
   };
 
-  return [state, setValue, clearStorage];
+  const showAllLocalStorage = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      const values = await AsyncStorage.multiGet(keys);
+      const data = keys.map((key, index) => ({ key, value: values[index][1] }));
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  
+
+  return [state, setValue, clearStorage,showAllLocalStorage];
 };

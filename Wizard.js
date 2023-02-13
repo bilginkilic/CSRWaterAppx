@@ -7,40 +7,42 @@ import { useLocalStorage } from './useLocalStorage';
 
 const Wizard = () => {
     const { takeTest } = React.useContext(AuthContext);
-    //const [questionIndex, setQuestionIndex] = useState(0);
     const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
-  //  const [answers, setAnswers] = useState([]);
     const [answers, setAnswers] = useLocalStorage('answers', []);
-  //  const [hasSurvey, setHasSurvey] = useLocalStorage('hasSurvey', false);
-    const questions = [{
-        text: 'How often do you take short showers?', options: [{ text: 'Always', value: 5 }, { text: 'Sometimes', value: 3 }, { text: 'Rarely', value: 1 },],
+    const questions = [{        text: 'How careful are you about water consumption?',         options: [{ text: 'I\'m very careful', value: 5 },                   { text: 'I\'m somewhat careful', value: 3 },                   { text: 'I\'m not careful', value: 1 },],
     },
     {
         text: 'Do you turn off the faucet while brushing your teeth?',
         options: [
-            { text: 'Yes', value: 5 },
-            { text: 'No', value: 1 },
+            { text: 'Yes, I do', value: 5 },
+            { text: 'No, I don\'t', value: 1 },
         ],
     },
     {
-        text: 'Do you use a reusable water bottle?',
+        text: 'What steps do you take for water conservation?',
         options: [
-            { text: 'Yes', value: 5 },
-            { text: 'No', value: 1 },
+            { text: 'Taking shorter showers', value: 5 },
+            { text: 'Turning off the faucet while washing hands', value: 3 },
+            { text: 'Using a container to wash vegetables/fruits instead of running water', value: 3 },
+            { text: 'Other steps', value: 2 },
+            { text: 'I don\'t take any steps', value: 1 },
         ],
     },
     {
-        text: 'Do you fix leaks promptly?',
+        text: 'When do you run your dishwasher?',
         options: [
-            { text: 'Yes', value: 5 },
-            { text: 'No', value: 1 },
+            { text: 'When it\'s completely full', value: 5 },
+            { text: 'When it\'s half full', value: 3 },
+            { text: 'Always, regardless of how full it is', value: 1 },
         ],
     },
     {
-        text: 'Do you use a low-flow toilet?',
+        text: 'What water-saving products do you use?',
         options: [
-            { text: 'Yes', value: 5 },
-            { text: 'No', value: 1 },
+            { text: 'Water-saving showerhead', value: 5 },
+            { text: 'Aerator/faucet cartridge', value: 5 },
+            { text: 'Other products', value: 2 },
+            { text: 'I don\'t use any products', value: 1 },
         ],
     },
     ];
@@ -49,16 +51,11 @@ const Wizard = () => {
         const loadData = async () => {
             try {
                 const answersJson = await AsyncStorage.getItem('answers');
-                // const takenJson = await AsyncStorage.getItem('isTaken');
                 if (answersJson) {
                     const answers = JSON.parse(answersJson);
                     setAnswers(answers);
                     setQuestionIndex(answers.length);
                 }
-                // if (takenJson) {
-                //     const taken = JSON.parse(takenJson);
-                //     setHasSurvey(taken);
-                // }
             } catch (error) {
                 console.error(error);
             }
@@ -89,6 +86,7 @@ const Wizard = () => {
             {questionIndex < questions.length ? (
                 <View>
                     <Text style={styles.questionText}>{currentQuestion.text}</Text>
+                   
                     <View style={styles.optionsContainer}>
                         {currentQuestion.options.map((option, index) => (
                             <TouchableOpacity
@@ -105,13 +103,14 @@ const Wizard = () => {
                 <View>
                     <Text style={styles.finalText}>Thank you for taking the survey!</Text>
                     <TouchableOpacity style={styles.saveButton} onPress={saveAnswers}>
-                        <Text style={styles.saveButtonText}>Start   </Text>       
-                        </TouchableOpacity>
+                        <Text style={styles.saveButtonText}>Submit</Text>
+                    </TouchableOpacity>
                 </View>
             )}
         </View>
     );
 };
+
 const styles = StyleSheet.create({
     container: {
         flex: 1,

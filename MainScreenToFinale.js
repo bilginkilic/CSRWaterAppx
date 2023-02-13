@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { Button, Text, View, Image } from 'react-native';
-import { AuthContext } from './AuthContext';
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProfileScreen from './ProfileScreen';
+import { useLocalStorage } from './useLocalStorage';
 
 import FeedScreen from './FeedScreen.js';
 
@@ -21,6 +21,12 @@ function MainScreenToFinale() {
 
  
   const Tab = createBottomTabNavigator();
+  const [taskIndex, setTaskIndex] = useLocalStorage('taskIndex', 0);
+  const [remaningTask, setRemainingTask] =  useLocalStorage('remaningTask', 21); 
+ 
+  //   useEffect(() => {
+  //     setRemainingTask(21-taskIndex)
+  // }, [ taskIndex]);
 
   return (
 
