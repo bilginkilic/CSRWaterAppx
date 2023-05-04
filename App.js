@@ -9,7 +9,9 @@ import MainScreenToFinale from './MainScreenToFinale';
 import { Amplify } from 'aws-amplify';
 import config from './src/aws-exports';
 import { useLocalStorage } from './useLocalStorage';
-
+import TaskToFinale from './TaskToFinale';
+import MyAchivements from './MyAchivements';
+import TaskOptions from './TaskOptions';
 const Stack = createStackNavigator();
 
 function App() {
@@ -19,6 +21,8 @@ function App() {
   const [userToken, setUserToken] = useLocalStorage('userToken', '');
   const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
   const [answers, setAnswers] = useLocalStorage('answers', []);
+  const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
+  const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
 
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
@@ -33,6 +37,7 @@ function App() {
         case 'SIGN_IN':
           return {
             ...prevState,
+            isLoading: false,
             isSignout: false,
             userToken: action.token,
             //hasSurvey: false,
@@ -49,6 +54,15 @@ function App() {
             userToken: null,
             hasSurvey: action.hasSurvey
           };
+          case 'RESET_STATE':
+            return {
+              isLoading: true,
+              isSignout: false,
+              userToken: null,
+              hasSurvey: null,
+              questionIndex:0,
+              answers:[]
+            };
       }
     },
     {
@@ -76,6 +90,7 @@ function App() {
         if (data.userToken !== '') {
           setUserToken(data.userToken)
           dispatch({ type: 'SIGN_IN', token: data.userToken });
+          console.log('state:', state);
         }
       },
       signOut: () => {
@@ -95,6 +110,14 @@ function App() {
       signUp: async (data) => {
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
+      
+      resetState: () => {
+        setQuestionIndex(0)
+        setAnswers([])
+        setSavingValue(0)
+        setTotalValue(0)
+        dispatch({ type: 'RESET_STATE' });
+      }
     }),
     [setHasSurvey]
   );
@@ -117,13 +140,21 @@ function App() {
           ) : (
             // Kullanıcı oturum açtıysa ana ekranı göster - anket yok
             (state.hasSurvey ?
-              <Stack.Screen
+              <Stack.Group>
+                 <Stack.Screen
                 name="MainScreenToFinale"
                 component={MainScreenToFinale}
                 options={{
                   title: 'WATER APP',
                 }}
-              /> :
+              /> 
+           
+              <Stack.Screen name="TaskToFinale" component={TaskToFinale} />
+              <Stack.Screen name="MyAchivements" component={MyAchivements} />
+              <Stack.Screen name="TaskOptions" component={TaskOptions} />
+            </Stack.Group>
+
+             : <Stack.Group>
               <Stack.Screen
                 name="Main"
                 component={MainScreen}
@@ -131,6 +162,11 @@ function App() {
                   title: 'WELCOME TO WATER APP',
                 }}
               />
+              <Stack.Screen name="TaskToFinale" component={TaskToFinale} />
+              <Stack.Screen name="MyAchivements" component={MyAchivements} />
+              <Stack.Screen name="TaskOptions" component={TaskOptions} />
+            </Stack.Group>
+
             )
           )}
         </Stack.Navigator>

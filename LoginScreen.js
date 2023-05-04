@@ -13,7 +13,7 @@ const LoginScreen = () => {
 
   const handleSignInDev = async () => {
     try {
-       
+        resetState();
         signIn({ userToken:'OK' });
     
     
@@ -38,7 +38,7 @@ const LoginScreen = () => {
     }
   };
   
-  const { signIn } = React.useContext(AuthContext);
+  const { resetState, signIn } = React.useContext(AuthContext);
 
   return (
     <View style={styles.container}>
@@ -62,12 +62,12 @@ const LoginScreen = () => {
         value={password}
         onChangeText={setPassword}
       />
-      {/* <TouchableOpacity style={styles.buttonContainer} onPress={handleSignInDev}>
+      <TouchableOpacity style={styles.buttonContainer} onPress={handleSignInDev}>
         <View>
           <Text style={styles.buttonText}>LOGIN Quick</Text>
         </View>
       </TouchableOpacity>
-      <Text>Vs</Text> */}
+      <Text>Vs</Text> 
       <TouchableOpacity style={styles.buttonContainer} onPress={handleSignIn}>
         <View>
           <Text style={styles.buttonText}>LOGIN </Text>

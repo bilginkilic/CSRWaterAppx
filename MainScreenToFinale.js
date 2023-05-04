@@ -7,7 +7,8 @@ import { useLocalStorage } from './useLocalStorage';
 
 import FeedScreen from './FeedScreen.js';
 
-import TaskScreen from './TaskScreen';
+ 
+import MyTask from './MyTask';
 
 MaterialCommunityIcons.loadFont(); 
 
@@ -49,7 +50,7 @@ function MainScreenToFinale() {
       />
       <Tab.Screen
         name="TaskScreen"
-        component={TaskScreen}
+        component={MyTask}
         options={{
           headerShown: false,
           tabBarLabel: 'Tasks',

@@ -9,68 +9,128 @@ const Wizard = () => {
     const { takeTest } = React.useContext(AuthContext);
     const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
     const [answers, setAnswers] = useLocalStorage('answers', []);
-    const questions = [{        text: 'How careful are you about water consumption?',         options: [{ text: 'I\'m very careful', value: 5 },                   { text: 'I\'m somewhat careful', value: 3 },                   { text: 'I\'m not careful', value: 1 },],
-    },
-    {
-        text: 'Do you turn off the faucet while brushing your teeth?',
-        options: [
-            { text: 'Yes, I do', value: 5 },
-            { text: 'No, I don\'t', value: 1 },
-        ],
-    },
-    {
-        text: 'What steps do you take for water conservation?',
-        options: [
-            { text: 'Taking shorter showers', value: 5 },
-            { text: 'Turning off the faucet while washing hands', value: 3 },
-            { text: 'Using a container to wash vegetables/fruits instead of running water', value: 3 },
-            { text: 'Other steps', value: 2 },
-            { text: 'I don\'t take any steps', value: 1 },
-        ],
-    },
-    {
-        text: 'When do you run your dishwasher?',
-        options: [
-            { text: 'When it\'s completely full', value: 5 },
-            { text: 'When it\'s half full', value: 3 },
-            { text: 'Always, regardless of how full it is', value: 1 },
-        ],
-    },
-    {
-        text: 'What water-saving products do you use?',
-        options: [
-            { text: 'Water-saving showerhead', value: 5 },
-            { text: 'Aerator/faucet cartridge', value: 5 },
-            { text: 'Other products', value: 2 },
-            { text: 'I don\'t use any products', value: 1 },
-        ],
-    },
-    ];
+    const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
+    const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
 
+    const [questions, setQuestions] = useState([
+        {
+        id:1,
+        text: 'Do you use a dishwasher to wash your dishes?',
+        options: [
+            { text: 'Yes', valueSaving: 111 ,valueTotal:15 , task:'Always washing in dishwasher, congratulations!' , category:'Dishwashing' , type:'Achievement'},
+            { text: 'No', valueSaving: 0 ,valueTotal:126, task:'Need to wash in dishwasher, take the necessary action! ', category:'Dishwashing' , type:'Task' },
+        ],
+    },
+    {
+        id:2,
+        text: 'Do you rinse the dishes before putting them in the machine?',
+        options: [
+            { text: 'Yes', valueSaving: 21 ,valueTotal:36, task:'Do not waste water for rinsing, congratulations!', category:'Dishwashing' , type:'Achievement'},
+            { text: 'No', valueSaving: 0 ,valueTotal:15,task:'Do you really need to rinse, take the necessary action!', category:'Dishwashing' , type:'Task'},
+        ],
+    },
+    {
+        id:3,
+        text: 'How do you run your dishwasher, full or half full?',
+        options: [
+            { text: 'Full', valueSaving: 11 ,valueTotal:22 , task:'You made a significant effect by full loading of your dishwasher, congratulations!',category:'Dishwashing', type:'Achievement' },
+            { text: 'Half full', valueSaving: 0,valueTotal:22 ,task:'Do you know full loading your dishwasher saves 11 liters for each run, take the necessary action! ', category:'Dishwashing' , type:'Task'},
+        ],
+    },
+    {
+        id:4,
+        text: 'Do the faucets in your house have slow-flows? (for 5 mins shower, 1  flush)',
+        options: [
+            { text: 'Yes', valueSaving: 44 ,valueTotal:76 , task:'You made a significant effect by full loading of your dishwasher, congratulations!', category:'Plumbing' ,type:'Achievement'  },
+            { text: 'No', valueSaving: 0 ,valueTotal:120,task:'You can save water with an easy arrangement of slow-flows, take the necessary action! ', category:'Plumbing' , type:'Task'},
+        ],
+    },
+    {
+        id:5,
+        text: 'How many minutes you take a shower?',
+        options: [
+            { text: 'Under 5 mins', valueSaving: 160,valueTotal:70 ,  task:'Bucket usage or 5 minutes shower is the target and it is a hard challenge, congratulations!', category:'Shower' ,type:'Achievement' },
+            { text: '5 - 10 mins', valueSaving: 80 ,valueTotal:150 ,task:'Decreasing your shower duration makes a significant difference, take the necessary action! ', category:'Shower' , type:'Task'},
+            { text: '11 - 15 mins', valueSaving: -20 ,valueTotal:250 ,task:'Decreasing your shower duration makes a significant difference, take the necessary action! ', category:'Shower' , type:'Task'},
+            { text: 'Over 15 mins', valueSaving: -220 ,valueTotal:450 ,task:'Decreasing your shower duration makes a significant difference, take the necessary action! ', category:'Shower' , type:'Task'},
+            { text: 'Use a bucket', valueSaving: 210 ,valueTotal:20, task:'Bucket usage or 5 minutes shower is the target and it is a hard challenge, congratulations!', category:'Shower' ,type:'Achievement'  } 
+        ],
+    },
+    {
+        id:6,
+        text: 'How do you laundry, full or half full?',
+        options: [
+            { text: 'Full', valueSaving: 90 ,valueTotal:180  ,  task:'By full loading your laundry you save 90 liters water , congratulations!', category:'Laundry' ,type:'Achievement'},
+            { text: 'Half full', valueSaving: 0 ,valueTotal:180 ,task:'Turn off the water and save 10 liters more for your each brush, take the necessary action! ', category:'Laundry' , type:'Task'},
+        ],
+    },
+    {
+        id:7,
+        text: 'Do you turn off the water while you are brushing?',
+        options: [
+            { text: 'Yes', valueSaving: 2,valueTotal:2  ,  task:'You saved 10 liters for your each brush , congratulations!', category:'Daily activities' ,type:'Achievement'},
+            { text: 'No', valueSaving: 0,valueTotal:4 ,task:'Decreasing your shower duration makes a significant difference, take the necessary action! ', category:'Daily activities' , type:'Task'},
+        ],
+    },
+    {
+        id:8,
+        text: 'Does your faucets/pipes leak?',
+        options: [
+            { text: 'Yes', valueSaving: 0 ,valueTotal:32 ,  task:'You fixed your leaky faucets, congratulations!', category:'Plumbing' ,type:'Achievement'},
+            { text: 'No', valueSaving: 32 ,valueTotal:0,task:'32 liters more with only one leaky faucet, take the necessary action!  ', category:'Plumbing' , type:'Task' },
+        ],
+    },
+    {
+        id:9,
+        text: 'Do you have car?',
+        options: [
+            { text: 'No', valueSaving: 0 ,valueTotal:0 },
+            
+            { text: '120 liters more with each car wash, take the necessary action!', valueSaving: 0 ,valueTotal:200 ,  task:'By full loading your laundry you save 90 liters water , congratulations!', category:'Car owners' ,type:'Task' },
+            { text: 'Was your car with pressure washer system', valueSaving: 120 ,valueTotal:80 ,task:'Washing your car by pressure washer systems you saved 120 liters water , congratulations!', category:'Car owners' , type:'Achievement'},
+        ]
+
+    }
+   
+    
+]);
+
+
+ // console.log('Questions:',questionIndex,questions.length);
+ console.log('Answers:' ,answers);
+//   console.log("benchmark",savingValue,totalValue)
     useEffect(() => {
+       
         const loadData = async () => {
+           
             try {
                 const answersJson = await AsyncStorage.getItem('answers');
                 if (answersJson) {
                     const answers = JSON.parse(answersJson);
                     setAnswers(answers);
                     setQuestionIndex(answers.length);
+                  //  showAllLocalStorage();
                 }
             } catch (error) {
                 console.error(error);
             }
         };
+        
         loadData();
+       
     }, []);
 
-    const handleSelectOption = (value) => {
-        setAnswers([...answers, value]);
+    const handleSelectOption = (question,opt) => {
+        setAnswers([...answers,{questionid:question.id, question :question.text,answer: opt.text , saving: opt.valueSaving, total: opt.valueTotal, task:opt.task, type:opt.type, category:opt.category, completed:false}]);
+        setSavingValue(savingValue+ opt.valueSaving)
+        setTotalValue( totalValue+ opt.valueTotal)
         setQuestionIndex(questionIndex + 1);
     };
 
     const saveAnswers = async () => {
         try {
             await AsyncStorage.setItem('answers', JSON.stringify(answers));
+            await AsyncStorage.setItem('benchmark', JSON.stringify({savingValue:savingValue,totalValue:totalValue}));
             await AsyncStorage.setItem('isTaken', JSON.stringify(true));
             takeTest();
             console.log(answers);
@@ -83,7 +143,8 @@ const Wizard = () => {
     const currentQuestion = questions[questionIndex];
     return (
         <View style={styles.container}>
-            {questionIndex < questions.length ? (
+            { questionIndex < questions.length
+             ? (
                 <View>
                     <Text style={styles.questionText}>{currentQuestion.text}</Text>
                    
@@ -92,7 +153,7 @@ const Wizard = () => {
                             <TouchableOpacity
                                 key={index}
                                 style={styles.optionButton}
-                                onPress={() => handleSelectOption(option.value)}
+                                onPress={() => handleSelectOption(currentQuestion,option)}
                             >
                                 <Text style={styles.optionText}>{option.text}</Text>
                             </TouchableOpacity>
@@ -101,7 +162,7 @@ const Wizard = () => {
                 </View>
             ) : (
                 <View>
-                    <Text style={styles.finalText}>Thank you for taking the survey!</Text>
+                    <Text style={styles.finalText}>Thank you for taking the survey!!!</Text>
                     <TouchableOpacity style={styles.saveButton} onPress={saveAnswers}>
                         <Text style={styles.saveButtonText}>Submit</Text>
                     </TouchableOpacity>
@@ -131,14 +192,15 @@ const styles = StyleSheet.create({
         margin: 10,
         width: '100%',
     },
+    
     optionButton: {
-        backgroundColor: 'red',
+        backgroundColor:  '#3498db', // Change the button color to blue
         padding: 20,
         margin: 10,
         borderRadius: 10,
         width: '70%',
         alignItems: 'center',
-    },
+      },
     optionText: {
         color: 'white',
         fontSize: 18,
@@ -150,7 +212,7 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     saveButton: {
-        backgroundColor: 'red',
+        backgroundColor:  '#3498db',
         padding: 20,
         margin: 10,
         borderRadius: 10,

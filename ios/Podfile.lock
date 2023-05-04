@@ -306,6 +306,8 @@ PODS:
     - React-Core
   - react-native-document-picker (8.1.3):
     - React-Core
+  - react-native-ionicons (4.6.5):
+    - React
   - react-native-netinfo (9.3.7):
     - React-Core
   - react-native-pdf (6.6.2):
@@ -453,6 +455,7 @@ DEPENDENCIES:
   - React-logger (from `../node_modules/react-native/ReactCommon/logger`)
   - react-native-blob-util (from `../node_modules/react-native-blob-util`)
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - react-native-ionicons (from `../node_modules/react-native-ionicons`)
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pdf (from `../node_modules/react-native-pdf`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -543,6 +546,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-blob-util"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
+  react-native-ionicons:
+    :path: "../node_modules/react-native-ionicons"
   react-native-netinfo:
     :path: "../node_modules/@react-native-community/netinfo"
   react-native-pdf:
@@ -629,6 +634,7 @@ SPEC CHECKSUMS:
   React-logger: 1623c216abaa88974afce404dc8f479406bbc3a0
   react-native-blob-util: 4949dcc0dd5ee25fcb5abe0687f67fa3d5cdf05a
   react-native-document-picker: 958e2bc82e128be69055be261aeac8d872c8d34c
+  react-native-ionicons: 7ce04a8e61c6de2fc3b6798e8b9621b865cb18b1
   react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
   react-native-pdf: 33c622cbdf776a649929e8b9d1ce2d313347c4fa
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
