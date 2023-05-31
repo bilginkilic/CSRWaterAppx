@@ -5,8 +5,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ProfileScreen from './ProfileScreen';
 
-import FeedScreen from './FeedScreen.js';
-import InteractScreen from './InteractScreen';
+ import InteractScreen from './InteractScreen';
+import IntroPage from './IntroPage';
 
 
 
@@ -34,7 +34,7 @@ function HomeScreen() {
     >
       <Tab.Screen
         name="About"
-        component={FeedScreen}
+        component={IntroPage}
         options={{
           tabBarLabel: 'About',
           tabBarVisible: false,

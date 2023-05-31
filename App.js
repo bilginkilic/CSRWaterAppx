@@ -12,6 +12,7 @@ import { useLocalStorage } from './useLocalStorage';
 import TaskToFinale from './TaskToFinale';
 import MyAchivements from './MyAchivements';
 import TaskOptions from './TaskOptions';
+import SubSurvey from './SubSurvey'
 const Stack = createStackNavigator();
 
 function App() {
@@ -23,7 +24,8 @@ function App() {
   const [answers, setAnswers] = useLocalStorage('answers', []);
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
-
+  const [questions, setQuestions] = useLocalStorage('questions', []);
+  const [questionsw, setQuestionsw] = useLocalStorage('questionsw', []);
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -116,6 +118,8 @@ function App() {
         setAnswers([])
         setSavingValue(0)
         setTotalValue(0)
+        setQuestions([])
+     //   setQuestionsw([])
         dispatch({ type: 'RESET_STATE' });
       }
     }),
@@ -152,6 +156,7 @@ function App() {
               <Stack.Screen name="TaskToFinale" component={TaskToFinale} />
               <Stack.Screen name="MyAchivements" component={MyAchivements} />
               <Stack.Screen name="TaskOptions" component={TaskOptions} />
+              <Stack.Screen name="SubSurvey" component={SubSurvey} />
             </Stack.Group>
 
              : <Stack.Group>

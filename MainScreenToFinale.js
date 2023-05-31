@@ -42,7 +42,7 @@ function MainScreenToFinale() {
         component={FeedScreen}
         options={{
           headerShown: false,
-          tabBarLabel: 'FeedScreen',
+          tabBarLabel: 'My tasks',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),

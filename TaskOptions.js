@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Alert } from 'react-native';
 import { useLocalStorage } from './useLocalStorage';
 
 const TaskOptions = ({ route, navigation }) => {
@@ -8,7 +8,6 @@ const TaskOptions = ({ route, navigation }) => {
   const [selectedTasks, setSelectedTasks] = useLocalStorage('selectedTasks', []);
 
   const tasks = answers.filter((answer) => answer.type === 'Task');
-  
 
   const toggleTaskSelection = (taskId) => {
     setSelectedTasks((prevSelectedTasks) => {
@@ -21,13 +20,13 @@ const TaskOptions = ({ route, navigation }) => {
   };
 
   const addToTaskList = () => {
-    // Retrieve the selected task objects based on the selected task IDs
     const selectedTaskObjects = tasks.filter((task) => selectedTasks.includes(task.task));
-    // Perform the action to add selected tasks to the task list
-    
-    // Reset selected tasks
     setSelectedTasks(selectedTaskObjects);
-    console.log('Selected tasks:', selectedTaskObjects);
+    showAlert();
+  };
+
+  const showAlert = () => {
+    Alert.alert('Success', 'The task has been added to the list.', [{ text: 'OK' }], { cancelable: false });
   };
 
   return (
