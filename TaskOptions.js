@@ -9,46 +9,49 @@ const TaskOptions = ({ route, navigation }) => {
 
   const tasks = answers.filter((answer) => answer.type === 'Task');
 
-  const toggleTaskSelection = (taskId) => {
-    setSelectedTasks((prevSelectedTasks) => {
-      if (prevSelectedTasks.includes(taskId)) {
-        return prevSelectedTasks.filter((id) => id !== taskId);
-      } else {
-        return [...prevSelectedTasks, taskId];
-      }
-    });
+  const toggleTaskSelection = (taskId, task) => {
+    const isSelected = selectedTasks.some((selectedTask) => selectedTask.question === task.question);
+    if (isSelected) {
+      showAlert();
+    } else {
+      setSelectedTasks((prevSelectedTasks) => [...prevSelectedTasks, task]);
+      showAlert2();
+    }
   };
 
   const addToTaskList = () => {
-    const selectedTaskObjects = tasks.filter((task) => selectedTasks.includes(task.task));
-    setSelectedTasks(selectedTaskObjects);
-    showAlert();
+    // Perform any additional operations before adding tasks to the list
   };
 
   const showAlert = () => {
+    Alert.alert('Duplicate Task', 'The task is already in the list.', [{ text: 'OK' }], { cancelable: false });
+  };
+
+  const showAlert2 = () => {
     Alert.alert('Success', 'The task has been added to the list.', [{ text: 'OK' }], { cancelable: false });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.heading}>Tasks</Text>
       {tasks
         .filter((task) => task.category === categoryId)
         .map((task) => (
           <TouchableOpacity
-            key={task.id}
-            onPress={() => toggleTaskSelection(task.task)}
+            key={task.questionid}
+            onPress={() => toggleTaskSelection(task.questionid, task)}
             style={[
               styles.taskItem,
-              selectedTasks.includes(task.task) && styles.selectedTaskItem,
+              selectedTasks.some((selectedTask) => selectedTask.question === task.question) && styles.selectedTaskItem,
             ]}
           >
             <Text style={styles.taskName}>{task.task}</Text>
           </TouchableOpacity>
         ))}
-      <TouchableOpacity onPress={addToTaskList} style={styles.addButton}>
-        <Text style={styles.addButtonText}>Add to Task List</Text>
-      </TouchableOpacity>
+      {tasks.filter((task) => task.category === categoryId).length === 0 && (
+        <View style={styles.emptyContainer}>
+          <Text style={styles.emptyText}>Horray, nothing to do here! 🎉</Text>
+        </View>
+      )}
     </View>
   );
 };
@@ -59,11 +62,6 @@ const styles = StyleSheet.create({
     padding: 16,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  heading: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 16,
   },
   taskItem: {
     padding: 8,
@@ -78,16 +76,16 @@ const styles = StyleSheet.create({
   taskName: {
     fontSize: 16,
   },
-  addButton: {
-    marginTop: 16,
-    backgroundColor: '#4caf50', // Green color for the add button
-    padding: 12,
-    borderRadius: 8,
+  emptyContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 16,
+  emptyText: {
+    fontSize: 20,
     fontWeight: 'bold',
+    textAlign: 'center',
+    color: '#888',
   },
 });
 

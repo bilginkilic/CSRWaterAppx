@@ -26,6 +26,7 @@ function App() {
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
   const [questions, setQuestions] = useLocalStorage('questions', []);
   const [questionsw, setQuestionsw] = useLocalStorage('questionsw', []);
+  const [selectedTasks, setSelectedTasks] = useLocalStorage('selectedTasks', []);
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -119,6 +120,7 @@ function App() {
         setSavingValue(0)
         setTotalValue(0)
         setQuestions([])
+        setSelectedTasks([])
      //   setQuestionsw([])
         dispatch({ type: 'RESET_STATE' });
       }
