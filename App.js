@@ -13,6 +13,7 @@ import TaskToFinale from './TaskToFinale';
 import MyAchivements from './MyAchivements';
 import TaskOptions from './TaskOptions';
 import SubSurvey from './SubSurvey'
+import { GlobalProvider } from './GlobalContext';
 const Stack = createStackNavigator();
 
 function App() {
@@ -128,6 +129,7 @@ function App() {
     [setHasSurvey]
   );
   return (
+    <GlobalProvider>
     <AuthContext.Provider value={authContext}>
       <NavigationContainer>
         <Stack.Navigator>
@@ -155,9 +157,15 @@ function App() {
                 }}
               /> 
            
-              <Stack.Screen name="TaskToFinale" component={TaskToFinale} />
-              <Stack.Screen name="MyAchivements" component={MyAchivements} />
-              <Stack.Screen name="TaskOptions" component={TaskOptions} />
+              <Stack.Screen name="TaskToFinale" component={TaskToFinale}  options={{
+                  title: 'Check your task',
+                }}/>
+              <Stack.Screen name="MyAchivements" component={MyAchivements}  options={{
+                  title: 'The Achivements',
+                }}/>
+              <Stack.Screen name="TaskOptions" component={TaskOptions}   options={{
+                  title: 'Choose a task to do!',
+                }}/>
               <Stack.Screen name="SubSurvey" component={SubSurvey} />
             </Stack.Group>
 
@@ -179,6 +187,7 @@ function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </AuthContext.Provider>
+    </GlobalProvider>
   );
 }
 

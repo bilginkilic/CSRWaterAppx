@@ -37,7 +37,7 @@ const Wizard = () => {
 },
 {
     id:4,
-    text: 'Do the faucets in your house have slow-flows? (for 5 mins shower, 1  flush)',
+    text: 'Do the faucets in your house have slow-flows?',
     options: [
         { text: 'Yes', valueSaving: 44 ,valueTotal:76 , task:'You made a significant effect by full loading of your dishwasher, congratulations!', category:'Plumbing' ,type:'Achievement'  },
         { text: 'No', valueSaving: 0 ,valueTotal:120,task:'You can save water with an easy arrangement of slow-flows, take the necessary action! ', category:'Plumbing' , type:'Task'},
@@ -59,7 +59,7 @@ const Wizard = () => {
     text: 'How do you laundry, full or half full?',
     options: [
         { text: 'Full', valueSaving: 90 ,valueTotal:180  ,  task:'By full loading your laundry you save 90 liters water , congratulations!', category:'Laundry' ,type:'Achievement'},
-        { text: 'Half full', valueSaving: 0 ,valueTotal:180 ,task:'Turn off the water and save 10 liters more for your each brush, take the necessary action! ', category:'Laundry' , type:'Task'},
+        { text: 'Half full', valueSaving: 0 ,valueTotal:180 ,task:'90 liters more with full loaded laundries, take the necessary action!', category:'Laundry' , type:'Task'},
     ],
 },
 {
@@ -67,7 +67,7 @@ const Wizard = () => {
     text: 'Do you turn off the water while you are brushing?',
     options: [
         { text: 'Yes', valueSaving: 2,valueTotal:2  ,  task:'You saved 10 liters for your each brush , congratulations!', category:'Daily activities' ,type:'Achievement'},
-        { text: 'No', valueSaving: 0,valueTotal:4 ,task:'Decreasing your shower duration makes a significant difference, take the necessary action! ', category:'Daily activities' , type:'Task'},
+        { text: 'No', valueSaving: 0,valueTotal:4 ,task:'Turn off the water and save 10 liters more for your each brush, take the necessary action!', category:'Daily activities' , type:'Task'},
     ],
 },
 {
@@ -80,7 +80,7 @@ const Wizard = () => {
 },
 {
     id:9,
-    text: 'Do you have car?',
+    text: 'Do you have a car?',
     options: [
         { text: 'No', valueSaving: 0 ,valueTotal:0 },
         
@@ -90,7 +90,7 @@ const Wizard = () => {
 },
 {
     id:10,
-    text: 'Do you wash yourself or do you use pressure washer system?',
+    text: 'Do you wash your car yourself or do you use pressure washer system?',
     options: [
      
         
@@ -198,23 +198,25 @@ useEffect(() => {
         <View>
           <View style={styles.waterDropContainer}>
             <Image source={require('./images/category/drop.png')} style={styles.waterDropImage} />
-            <Text style={styles.savingValue}>{savingValue} L</Text>
+             
           </View>
 
           <View style={styles.infoContainer}>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoText}>Saved water according to survey:</Text>
-              <Text style={styles.infoValue}>{savingValue} L</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoText}>Total water print:</Text>
-              <Text style={styles.infoValue}>{totalValue} L</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoText}>Istanbul Dam load balance:</Text>
-              <Text style={styles.infoValue}>95%</Text>
-            </View>
-          </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.infoText}>You saved</Text>
+          <Text style={styles.infoValue}>{savingValue} L</Text>
+          <Text style={styles.infoText}>water!</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.infoText}>Your water footprint</Text>
+          <Text style={styles.infoValue}>{totalValue} L!</Text>
+        </View>
+        <View style={styles.infoRow}>
+          <Text style={styles.infoText}>Istanbul dam fill rate </Text>
+          <Text style={styles.infoValue}>95%</Text>
+        </View>
+      </View>
+
 
           <Text style={styles.finalText}>Thank you for taking the survey!!!</Text>
           <TouchableOpacity style={styles.saveButton} onPress={saveAnswers}>

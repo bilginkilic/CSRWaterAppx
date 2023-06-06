@@ -1,15 +1,77 @@
-import React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { useLocalStorage } from './useLocalStorage';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 function ProfileScreen() {
   const { signOut } = React.useContext(AuthContext);
+  const [answers, setAnswers] = useLocalStorage('answers', []);
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
+
+  const [currentSavingValue, setcurrentSavingValue] = useState('currentSavingValue', 0);
+  const [currentTotalValue, setcurrentTotalValue] = useState('currentTotalValue', 0);
+  const [currentSavingValueText, setcurrentSavingValueText] = useState('currentSavingValueText', '');
+  const [currentTotalValueText, setcurrentTotalValueText] = useState('currentTotalValueText', '');
+
   const [username, setUsername, clearStorage, showAllLocalStorage] = useLocalStorage('username', '');
 
+ 
+
+
+  const calculateValues = () => {
+
+    let currentTotalValue = 0;
+    let currentSavingValue = 0;
+
+     answers.forEach((answer) => {
+      currentTotalValue += answer.total;
+      currentSavingValue += answer.saving;
+    });
+
+    setcurrentTotalValue(currentTotalValue);
+    setcurrentSavingValue(currentSavingValue);
+
+
+    let comparisonText = '';
+    console.log(currentSavingValue)
+    console.log(savingValue)
+    if (currentSavingValue > savingValue && savingValue > 0 ) {
+      let compSaving = currentSavingValue / savingValue * 100;
+      comparisonText = 'You have increased saved water by !' + compSaving.toFixed(2) + "%";
+      setcurrentSavingValueText(comparisonText)
+    } else {
+      setcurrentSavingValueText('')
+    }
+
+    console.log(currentTotalValue)
+    console.log(totalValue)
+    if (currentTotalValue < totalValue) {
+      let compTotal = currentTotalValue / totalValue * 100;
+      comparisonText = 'You have decreased water footprint by !' + compTotal.toFixed(2) + "%";
+      setcurrentTotalValueText(comparisonText)
+    } else {
+      setcurrentTotalValueText('')
+    }
+
+    console.log(comparisonText);
+  };
+
+  useEffect(() => {
+    console.log("maximus XF")
+    calculateValues();
+  }); 
+
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("maximus XR")
+      calculateValues();
+    })
+  );
+
+ 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -19,27 +81,65 @@ function ProfileScreen() {
 
       <View style={styles.waterDropContainer}>
         <Image source={require('./images/category/drop.png')} style={styles.waterDropImage} />
-        <Text style={styles.savingValue}>{savingValue} L</Text>
+
       </View>
 
       <View style={styles.infoContainer}>
+
+      {currentSavingValueText !== '' ? (<>
         <View style={styles.infoRow}>
-          <Text style={styles.infoText}>Saved water according to survey:</Text>
+          <Text style={styles.infoText}>You saved</Text>
+          <Text style={styles.infoValue}>{currentSavingValue} L</Text>
+          <Text style={styles.infoText}>water!</Text>
+        </View>
+
+         </>) : (<>
+          <View style={styles.infoRow}>
+          <Text style={styles.infoText}>You saved</Text>
           <Text style={styles.infoValue}>{savingValue} L</Text>
+          <Text style={styles.infoText}>water!</Text>
+        </View></>)}
+
+
+        {currentTotalValueText !== '' ? (<> 
+     
+          <View style={styles.infoRow}>
+          <Text style={styles.infoText}>Your water footprint</Text>
+          <Text style={styles.infoValue}>{currentTotalValue} L!</Text>
         </View>
+           </>) : (<>
+                
         <View style={styles.infoRow}>
-          <Text style={styles.infoText}>Total water print:</Text>
-          <Text style={styles.infoValue}>{totalValue} L</Text>
+          <Text style={styles.infoText}>Your water footprint</Text>
+          <Text style={styles.infoValue}>{totalValue} L!</Text>
         </View>
+           
+           </>)}
+
+  
         <View style={styles.infoRow}>
-          <Text style={styles.infoText}>Istanbul Dam load balance:</Text>
+          <Text style={styles.infoText}>Istanbul dam fill rate </Text>
           <Text style={styles.infoValue}>95%</Text>
         </View>
+        {currentSavingValueText !== '' ? (<><View style={styles.infoRow}>
+          <Text style={styles.infoText}>{currentSavingValueText} </Text>
+
+        </View>
+         </>) : (<></>)}
+        {currentTotalValueText !== '' ? (<> 
+          <View style={styles.infoRow}>
+
+            <Text style={styles.infoText}>{currentTotalValueText} </Text>
+          </View></>) : (<></>)}
       </View>
+
+
+      <Text style={styles.infoText}>Your answers are updated. {answers.length} </Text>
 
       <TouchableOpacity style={styles.signOutButton} onPress={signOut}>
         <Text style={styles.signOutButtonText}>Sign Out</Text>
       </TouchableOpacity>
+    
     </View>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect} from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import tasks from './TasksOrjinal';
@@ -7,11 +7,15 @@ const MyTaskScreen = () => {
   const navigation = useNavigation();
   const [selectedCategory, setSelectedCategory] = useState(null);
   const [answers, setAnswers] = useLocalStorage('answers', []);
-  const remainingTaskList = answers.filter((answer) => answer.type === 'Task');
+  const remainingTaskList = answers.filter((answer) => answer.type === 'Task' && answer.completed == false);
   const handleSelectCategory = (category) => {
     navigation.navigate('TaskOptions', { categoryId: category });
     setSelectedCategory(category);
   };
+
+  useEffect(() => {
+     
+  }); 
 
   const renderTaskCategories = () => {
     return Array.from(new Set(tasks.map((task) => task.category))).map((category) => (

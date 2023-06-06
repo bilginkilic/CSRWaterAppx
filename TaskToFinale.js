@@ -1,11 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useLocalStorage } from './useLocalStorage';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation ,useFocusEffect} from '@react-navigation/native';
+import { GlobalContext } from './GlobalContext';
+ 
 const TaskToFinale = () => {
   const navigation = useNavigation();
+  const { globalArray, setGlobalArray } = useContext(GlobalContext);
+
   const [selectedTasks, setSelectedTasks] = useLocalStorage('selectedTasks', []);
-  const [referringQuestion, setReferringQuestion] = useLocalStorage('referringQuestion',[])
+ 
   const [questionsx, setQuestionsx] = useState(
   [
     {
@@ -34,7 +38,7 @@ const TaskToFinale = () => {
 },
 {
     id:4,
-    text: 'Do the faucets in your house have slow-flows? (for 5 mins shower, 1  flush)',
+    text: 'Do the faucets in your house have slow-flows?',
     options: [
         { text: 'Yes', valueSaving: 44 ,valueTotal:76 , task:'You made a significant effect by full loading of your dishwasher, congratulations!', category:'Plumbing' ,type:'Achievement'  },
         { text: 'No', valueSaving: 0 ,valueTotal:120,task:'You can save water with an easy arrangement of slow-flows, take the necessary action! ', category:'Plumbing' , type:'Task'},
@@ -56,7 +60,7 @@ const TaskToFinale = () => {
     text: 'How do you laundry, full or half full?',
     options: [
         { text: 'Full', valueSaving: 90 ,valueTotal:180  ,  task:'By full loading your laundry you save 90 liters water , congratulations!', category:'Laundry' ,type:'Achievement'},
-        { text: 'Half full', valueSaving: 0 ,valueTotal:180 ,task:'Turn off the water and save 10 liters more for your each brush, take the necessary action! ', category:'Laundry' , type:'Task'},
+        { text: 'Half full', valueSaving: 0 ,valueTotal:180 ,task:'90 liters more with full loaded laundries, take the necessary action!', category:'Laundry' , type:'Task'},
     ],
 },
 {
@@ -64,7 +68,7 @@ const TaskToFinale = () => {
     text: 'Do you turn off the water while you are brushing?',
     options: [
         { text: 'Yes', valueSaving: 2,valueTotal:2  ,  task:'You saved 10 liters for your each brush , congratulations!', category:'Daily activities' ,type:'Achievement'},
-        { text: 'No', valueSaving: 0,valueTotal:4 ,task:'Decreasing your shower duration makes a significant difference, take the necessary action! ', category:'Daily activities' , type:'Task'},
+        { text: 'No', valueSaving: 0,valueTotal:4 ,task:'Turn off the water and save 10 liters more for your each brush, take the necessary action!', category:'Daily activities' , type:'Task'},
     ],
 },
 {
@@ -77,7 +81,7 @@ const TaskToFinale = () => {
 },
 {
     id:9,
-    text: 'Do you have car?',
+    text: 'Do you have a car?',
     options: [
         { text: 'No', valueSaving: 0 ,valueTotal:0 },
         
@@ -87,7 +91,7 @@ const TaskToFinale = () => {
 },
 {
     id:10,
-    text: 'Do you wash yourself or do you use pressure washer system?',
+    text: 'Do you wash your car yourself or do you use pressure washer system?',
     options: [
      
         
@@ -99,44 +103,34 @@ const TaskToFinale = () => {
 
 
 ]);
-
-
+ 
   const handleTaskSelection = (task) => {
+
+ 
+    const taksQuestion = questionsx.find((answer) => answer.id == task.questionid);
+ 
+ 
+    navigation.navigate('SubSurvey',taksQuestion);
+    
+  };
+
   
-    const taksQuestion = questionsx.filter((answer) => answer.id === task.questionid);
-   console.log(taksQuestion[0].text,taksQuestion[0].options)
-   navigation.navigate('SubSurvey',taksQuestion[0]);
-    //setReferringQuestion(task.question);
-  };
+  
+  useFocusEffect(
+    React.useCallback(() => {
+      console.log("welcome back cr",globalArray)
+      // Update selectedTasks whenever the screen gains focus
+      setSelectedTasks(globalArray);
+    }, [setSelectedTasks,globalArray])
+  );
 
-  const handleAnswerSelection = (question, answer) => {
 
-    setSelectedTasks((prevSelectedTasks) => {
-      return prevSelectedTasks?.map((task) => {
-        if (task.questionid === question.id) {
-          return { ...task, answer: answer };
-        }
-        return task;
-      });
-    });
-    setReferringQuestion(null);
-  };
-
-  const handleCompleteTasks = () => {
-    setSelectedTasks((prevSelectedTasks) => {
-      return prevSelectedTasks?.map((task) => {
-        if (selectedTasks.some((selectedTask) => selectedTask.questionid === task.questionid)) {
-          return { ...task, completed: true };
-        }
-        return task;
-      });
-    });
-  };
-
+  
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tasks to Complete</Text>
-      {selectedTasks.map((task) => (
+
+      { selectedTasks.length > 0 ? ( selectedTasks.map((task) => (
         <TouchableOpacity
           key={task.questionid}
           style={[
@@ -148,31 +142,17 @@ const TaskToFinale = () => {
           <Text style={styles.taskName}>{task.task}</Text>
           <Text style={styles.taskCategory}>{task.category}</Text>
         </TouchableOpacity>
-      ))}
-      {referringQuestion && (
-        <View style={styles.subPageContainer}>
-          <Text style={styles.subPageTitle}>{referringQuestion.text}</Text>
-          {referringQuestion?.options?.map((option, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.optionButton}
-              onPress={() => handleAnswerSelection(referringQuestion, option)}
-            >
-              <Text style={styles.optionText}>{option.text}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
+      ))):(
+
+        <Text style={styles.emptyText}>Horray, nothing to do here! 🎉 If you want to do more go to tasks to select more tasks</Text>
       )}
-      <TouchableOpacity
-        style={styles.completeButton}
-        onPress={handleCompleteTasks}
-        disabled={selectedTasks.length === 0}
-      >
-        <Text style={styles.completeButtonText}>Complete</Text>
-      </TouchableOpacity>
+ 
     </View>
   );
 };
+
+
+ 
 
 const styles = StyleSheet.create({
   container: {

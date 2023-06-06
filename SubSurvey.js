@@ -1,42 +1,71 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useContext } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet,Alert } from 'react-native';
 import { useLocalStorage } from './useLocalStorage';
-
+import { GlobalContext } from './GlobalContext';
 const SubSurvey = ({ navigation, route }) => {
-  const  question  = route.params;
+  const question = route.params;
   const [selectedOption, setSelectedOption] = useState(null);
-  
+  const { globalArray, setGlobalArray } = useContext(GlobalContext);
   const [answers, setAnswers] = useLocalStorage('answers', []);
-
   const [selectedTasks, setSelectedTasks] = useLocalStorage('selectedTasks', []);
- 
-  
-  const handleOptionSelection = (opt) => {
+
+
+  useEffect(() => {
+    console.log('Updated selectedTasks:', selectedTasks);
+    setGlobalArray(selectedTasks)
+  }, [selectedTasks]);
+
+
+  const handleOptionSelection = (answer, opt) => {
     setSelectedOption(opt);
-    setAnswers([
-        ...answers,
-        {
-          questionid: question.id,
-          question: question.text,
-          answer: opt.text,
-          saving: opt.valueSaving,
-          total: opt.valueTotal,
-          task: opt.task,
-          type: opt.type,
-          category: opt.category,
-          completed: false,
-        },
-      ]);
-      if (opt.type === 'Achievement') {
-        setSelectedTasks((prevSelectedTasks) =>
-          prevSelectedTasks.filter((task) => task.questionid !== question.id)
-        );
+
+console.log("MJS",opt)
+    //update the answers
+
+    const questionIdToUpdate = question.id;
+    const indexToUpdate = answers.findIndex((answer) => answer.questionid === questionIdToUpdate);
+
+    const updatedAnswers = [...answers];
+    updatedAnswers[indexToUpdate] = {
+      ...updatedAnswers[indexToUpdate],
+      completed: true,
+      type:"Achievement",
+      saving: opt.valueSaving,
+      total: opt.valueTotal
+    };
+
+    setAnswers(updatedAnswers);
+
+
+    if (opt.type === 'Achievement') {
+      const taskIndex = selectedTasks.findIndex(
+        (task) => task.questionid == question.id
+      );
+
+      if (taskIndex !== -1) {
+        const updatedTasks = [...selectedTasks];
+
+        updatedTasks.splice(taskIndex, 1);
+
+
+        setSelectedTasks(updatedTasks);
+
       }
+      navigation.goBack(); // Go back to the previous screen
+    }else{
+      showAlert();
+      navigation.goBack(); 
+    }
   };
 
+  const showAlert = () => {
+    Alert.alert('Info', 'You can do better! Consider other options to save more water next time.', [{ text: 'OK' }], { cancelable: false });
+  };
   const handleCompleteSubSurvey = () => {
     navigation.goBack(); // Go back to the previous screen
   };
+
+
 
   return (
     <View style={styles.container}>
@@ -48,21 +77,20 @@ const SubSurvey = ({ navigation, route }) => {
             styles.optionButton,
             selectedOption === option && styles.selectedOptionButton,
           ]}
-          onPress={() => handleOptionSelection(option)}
+          onPress={() => handleOptionSelection(option.text, option)}
         >
           <Text style={styles.optionText}>{option.text}</Text>
         </TouchableOpacity>
       ))}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         style={styles.completeButton}
         onPress={handleCompleteSubSurvey}
         disabled={!selectedOption}
       >
         <Text style={styles.completeButtonText}>Complete</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
-  
 };
 
 const styles = StyleSheet.create({
