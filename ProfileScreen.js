@@ -39,7 +39,7 @@ function ProfileScreen() {
     console.log(currentSavingValue)
     console.log(savingValue)
     if (currentSavingValue > savingValue && savingValue > 0 ) {
-      let compSaving = currentSavingValue / savingValue * 100;
+      let compSaving = (currentSavingValue-savingValue) / savingValue * 100;
       comparisonText = 'You have increased saved water by !' + compSaving.toFixed(2) + "%";
       setcurrentSavingValueText(comparisonText)
     } else {
@@ -49,7 +49,7 @@ function ProfileScreen() {
     console.log(currentTotalValue)
     console.log(totalValue)
     if (currentTotalValue < totalValue) {
-      let compTotal = currentTotalValue / totalValue * 100;
+      let compTotal = (totalValue-currentTotalValue) / totalValue * 100;
       comparisonText = 'You have decreased water footprint by !' + compTotal.toFixed(2) + "%";
       setcurrentTotalValueText(comparisonText)
     } else {

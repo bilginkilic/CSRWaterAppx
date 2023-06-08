@@ -23,8 +23,8 @@ const Wizard = () => {
     id:2,
     text: 'Do you rinse the dishes before putting them in the machine?',
     options: [
-        { text: 'Yes', valueSaving: 21 ,valueTotal:36, task:'Do not waste water for rinsing, congratulations!', category:'Dishwashing' , type:'Achievement'},
-        { text: 'No', valueSaving: 0 ,valueTotal:15,task:'Do you really need to rinse, take the necessary action!', category:'Dishwashing' , type:'Task'},
+        { text: 'Yes', valueSaving: 0 ,valueTotal:36, task:'Do not waste water for rinsing, congratulations!', category:'Dishwashing' , type:'Task'},
+        { text: 'No', valueSaving: 21 ,valueTotal:15,task:'Do you really need to rinse, take the necessary action!', category:'Dishwashing' , type:'Achievement'},
     ],
 },
 {
@@ -74,8 +74,8 @@ const Wizard = () => {
     id:8,
     text: 'Does your faucets/pipes leak?',
     options: [
-        { text: 'Yes', valueSaving: 0 ,valueTotal:32 ,  task:'You fixed your leaky faucets, congratulations!', category:'Plumbing' ,type:'Achievement'},
-        { text: 'No', valueSaving: 32 ,valueTotal:0,task:'32 liters more with only one leaky faucet, take the necessary action!  ', category:'Plumbing' , type:'Task' },
+        { text: 'Yes', valueSaving: 0 ,valueTotal:32 ,  task:'You fixed your leaky faucets, congratulations!', category:'Plumbing' ,type:'Task'},
+        { text: 'No', valueSaving: 32 ,valueTotal:0,task:'32 liters more with only one leaky faucet, take the necessary action!  ', category:'Plumbing' , type:'Achievement' },
     ],
 },
 {
