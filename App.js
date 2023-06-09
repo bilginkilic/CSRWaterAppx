@@ -58,7 +58,7 @@ function App() {
           return {
             ...prevState,
             isSignout: true,
-            userToken: null,
+            userToken: '',
             hasSurvey: action.hasSurvey
           };
         case 'RESET_STATE':
@@ -73,10 +73,12 @@ function App() {
       }
     },
     {
-      isLoading: true,
-      isSignout: false,
+      isLoading: false,
+      isSignout: true,
       userToken: null,
-      hasSurvey: false,
+      hasSurvey: null,
+      questionIndex: 0,
+      answers: []
     }
   );
 
@@ -105,7 +107,7 @@ function App() {
 
         setUserToken('')
 
-        dispatch({ type: 'SIGN_OUT', hasSurvey: false })
+        dispatch({ type: 'SIGN_OUT',hasSurvey:false})
       }
 
       ,
@@ -139,7 +141,7 @@ function App() {
             {state.isLoading ? (
               // Uygulama yüklenirken Splash ekranını göster
               <Stack.Screen name="Splash" component={SplashScreen} />
-            ) : state.userToken == null ? (
+            ) : state.userToken == '' ? (
               // Kullanıcı oturumu açmadıysa giriş ekranını göster
               <Stack.Screen
                 name="Login"

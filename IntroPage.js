@@ -1,13 +1,14 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet,Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const IntroPage = () => {
   const navigation = useNavigation();
 
   const handleStartSurveyPress = () => {
-    showAlert2()
+   
     navigation.navigate('Task');
+    showAlert2()
   };
 
   const showAlert2 = () => {
