@@ -38,10 +38,12 @@ The app also features a profile screen that displays the username of the logged-
 
 The app is built with React Native and uses several libraries, including React Navigation for screen navigation, React Native Vector Icons for displaying icons, and AsyncStorage for local storage. It follows a simple, clean architecture and is designed to be easily extensible with new features.
 
-## Some screenshots from the app
+## screenshots from the app
 
-![Screenshot 1](https://github.com/bilginkilic/CSRWaterAppx/blob/main/images/1.png?raw=true)
-![Screenshot 2](https://github.com/bilginkilic/CSRWaterAppx/blob/main/images/2.png?raw=true)
-![Screenshot 3](https://github.com/bilginkilic/CSRWaterAppx/blob/main/images/3.png?raw=true)
-![Screenshot 4](https://github.com/bilginkilic/CSRWaterAppx/blob/main/images/4.png?raw=true)
-![Screenshot 5](https://github.com/bilginkilic/CSRWaterAppx/blob/main/images/5.png?raw=true)
+
+<img src="https://github.com/bilginkilic/CSRWaterAppx/blob/main/images/1.png?raw=true" alt="Screenshot 1" width="400">
+<img src="https://github.com/bilginkilic/CSRWaterAppx/blob/main/images/2.png?raw=true" alt="Screenshot 2" width="400">
+<img src="https://github.com/bilginkilic/CSRWaterAppx/blob/main/images/3.png?raw=true" alt="Screenshot 3" width="400">
+<img src="https://github.com/bilginkilic/CSRWaterAppx/blob/main/images/4.png?raw=true" alt="Screenshot 4" width="400">
+<img src="https://github.com/bilginkilic/CSRWaterAppx/blob/main/images/5.png?raw=true" alt="Screenshot 5" width="400">
+
