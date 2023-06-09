@@ -13,8 +13,8 @@ import TaskToFinale from './TaskToFinale';
 import MyAchivements from './MyAchivements';
 import TaskOptions from './TaskOptions';
 import SubSurvey from './SubSurvey'
-import { GlobalProvider ,GlobalContext} from './GlobalContext';
- 
+import { GlobalProvider, GlobalContext } from './GlobalContext';
+
 const Stack = createStackNavigator();
 
 function App() {
@@ -24,13 +24,13 @@ function App() {
   const [userToken, setUserToken] = useLocalStorage('userToken', '');
   const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
   const [answers, setAnswers] = useLocalStorage('answers', []);
- // const { answers, setAnswers } = useContext(GlobalContext);
+  // const { answers, setAnswers } = useContext(GlobalContext);
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
   const [questions, setQuestions] = useLocalStorage('questions', []);
   const [questionsw, setQuestionsw] = useLocalStorage('questionsw', []);
   const [selectedTasks, setSelectedTasks] = useLocalStorage('selectedTasks', []);
- // const { globalArray, setGlobalArray } = useContext(GlobalContext);
+  // const { globalArray, setGlobalArray } = useContext(GlobalContext);
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {
@@ -47,7 +47,7 @@ function App() {
             isLoading: false,
             isSignout: false,
             userToken: action.token,
-            //hasSurvey: false,
+            hasSurvey: action.hasSurvey,
           };
         case 'TAKE_TEST':
           return {
@@ -61,15 +61,15 @@ function App() {
             userToken: null,
             hasSurvey: action.hasSurvey
           };
-          case 'RESET_STATE':
-            return {
-              isLoading: true,
-              isSignout: false,
-              userToken: null,
-              hasSurvey: null,
-              questionIndex:0,
-              answers:[]
-            };
+        case 'RESET_STATE':
+          return {
+            isLoading: true,
+            isSignout: false,
+            userToken: null,
+            hasSurvey: null,
+            questionIndex: 0,
+            answers: []
+          };
       }
     },
     {
@@ -82,9 +82,9 @@ function App() {
 
   useEffect(() => {
     const bootstrapAsync = async () => {
-       
 
-      
+
+
 
       dispatch({ type: 'RESTORE_TOKEN', token: userToken, hasSurvey: hasSurvey });
     };
@@ -96,15 +96,15 @@ function App() {
       signIn: async (data) => {
         if (data.userToken !== '') {
           setUserToken(data.userToken)
-          dispatch({ type: 'SIGN_IN', token: data.userToken });
-         // console.log('state:', state);
+          dispatch({ type: 'SIGN_IN', token: data.userToken,hasSurvey: hasSurvey });
+           console.log('state:', state);
         }
       },
       signOut: () => {
 
-        
+
         setUserToken('')
-       
+
         dispatch({ type: 'SIGN_OUT', hasSurvey: false })
       }
 
@@ -117,7 +117,7 @@ function App() {
       signUp: async (data) => {
         dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' });
       },
-      
+
       resetState: () => {
         setQuestionIndex(0)
         setAnswers([])
@@ -125,71 +125,71 @@ function App() {
         setTotalValue(0)
         setQuestions([])
         setSelectedTasks([])
-     //   setQuestionsw([])
+        //   setQuestionsw([])
         dispatch({ type: 'RESET_STATE' });
       }
-    }),
-    [setHasSurvey]
+    })
+   //,[setHasSurvey]
   );
   return (
     <GlobalProvider>
-    <AuthContext.Provider value={authContext}>
-      <NavigationContainer>
-        <Stack.Navigator>
-          {state.isLoading ? (
-            // Uygulama yüklenirken Splash ekranını göster
-            <Stack.Screen name="Splash" component={SplashScreen} />
-          ) : state.userToken == null ? (
-            // Kullanıcı oturumu açmadıysa giriş ekranını göster
-            <Stack.Screen
-              name="Login"
-              component={LoginScreen}
-              options={{
-                title: 'Sign in',
-              }}
-            />
-          ) : (
-            // Kullanıcı oturum açtıysa ana ekranı göster - anket yok
-            (state.hasSurvey ?
-              <Stack.Group>
-                 <Stack.Screen
-                name="MainScreenToFinale"
-                component={MainScreenToFinale}
-                options={{
-                  title: 'WATER APP',
-                }}
-              /> 
-           
-              <Stack.Screen name="TaskToFinale" component={TaskToFinale}  options={{
-                  title: 'Check your task',
-                }}/>
-              <Stack.Screen name="MyAchivements" component={MyAchivements}  options={{
-                  title: 'The Achivements',
-                }}/>
-              <Stack.Screen name="TaskOptions" component={TaskOptions}   options={{
-                  title: 'Choose a task to do!',
-                }}/>
-              <Stack.Screen name="SubSurvey" component={SubSurvey} />
-            </Stack.Group>
-
-             : <Stack.Group>
+      <AuthContext.Provider value={authContext}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            {state.isLoading ? (
+              // Uygulama yüklenirken Splash ekranını göster
+              <Stack.Screen name="Splash" component={SplashScreen} />
+            ) : state.userToken == null ? (
+              // Kullanıcı oturumu açmadıysa giriş ekranını göster
               <Stack.Screen
-                name="Main"
-                component={MainScreen}
+                name="Login"
+                component={LoginScreen}
                 options={{
-                  title: 'WELCOME TO WATER APP',
+                  title: 'Sign in',
                 }}
               />
-              <Stack.Screen name="TaskToFinale" component={TaskToFinale} />
-              <Stack.Screen name="MyAchivements" component={MyAchivements} />
-              <Stack.Screen name="TaskOptions" component={TaskOptions} />
-            </Stack.Group>
+            ) : (
+              // Kullanıcı oturum açtıysa ana ekranı göster - anket yok
+              (state.hasSurvey ?
+                <Stack.Group>
+                  <Stack.Screen
+                    name="MainScreenToFinale"
+                    component={MainScreenToFinale}
+                    options={{
+                      title: 'WATER APP',
+                    }}
+                  />
 
-            )
-          )}
-        </Stack.Navigator>
-      </NavigationContainer>
-    </AuthContext.Provider>
+                  <Stack.Screen name="TaskToFinale" component={TaskToFinale} options={{
+                    title: 'Check your task',
+                  }} />
+                  <Stack.Screen name="MyAchivements" component={MyAchivements} options={{
+                    title: 'The Achivements',
+                  }} />
+                  <Stack.Screen name="TaskOptions" component={TaskOptions} options={{
+                    title: 'Choose a task to do!',
+                  }} />
+                  <Stack.Screen name="SubSurvey" component={SubSurvey} />
+                </Stack.Group>
+
+                : <Stack.Group>
+                  <Stack.Screen
+                    name="Main"
+                    component={MainScreen}
+                    options={{
+                      title: 'WELCOME TO WATER APP',
+                    }}
+                  />
+                  <Stack.Screen name="TaskToFinale" component={TaskToFinale} />
+                  <Stack.Screen name="MyAchivements" component={MyAchivements} />
+                  <Stack.Screen name="TaskOptions" component={TaskOptions} />
+                </Stack.Group>
+
+              )
+            )}
+          </Stack.Navigator>
+        </NavigationContainer>
+      </AuthContext.Provider>
     </GlobalProvider>
   );
 }

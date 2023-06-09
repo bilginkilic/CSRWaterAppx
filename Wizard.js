@@ -8,9 +8,13 @@ const Wizard = () => {
   const { takeTest } = React.useContext(AuthContext);
   const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
   //const [answers, setAnswers] = useLocalStorage('answers', []);
+  const [hasSurvey, setHasSurvey] = useLocalStorage('hasSurvey', false);
   const { answers, setAnswers } = useContext(GlobalContext);
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
+  const [username, setUsername, clearStorage, showAllLocalStorage] = useLocalStorage('username', '');
+ 
+
   const [questionsw, setQuestionsw] = useState(  [
     {
     id:1,
@@ -105,6 +109,7 @@ const Wizard = () => {
 ]);
 
 useEffect(() => {
+
   const loadData = async () => {
     try {
       const answersJson = await AsyncStorage.getItem('answers');
@@ -114,17 +119,7 @@ useEffect(() => {
         setQuestionIndex(answers.length);
       }
 
-      //const questionsJson = await AsyncStorage.getItem('questions');
-      // if (questionsJson) {
-      //   const questions = JSON.parse(questionsJson);
-      //   setQuestions(questions);
-      // } 
-      // else {
-      //   // Set default questions if data is not available in local storage
-      //   // setQuestions([
-      //   //   // Default question objects
-      //   // ]);
-      // }
+       
     } catch (error) {
       console.error(error);
     }
@@ -159,6 +154,16 @@ useEffect(() => {
     }
   };
 
+
+  // const saveAnswersTest = async () => {
+  //   try {
+  //   showAllLocalStorage()
+  //   } catch (error) {
+  //     console.log(error);
+  //     alert('Failed to save answers. Please try again.');
+  //   }
+  // };
+
   const saveAnswers = async () => {
     try {
       await AsyncStorage.setItem('answers', JSON.stringify(answers));
@@ -167,6 +172,7 @@ useEffect(() => {
         JSON.stringify({ savingValue: savingValue, totalValue: totalValue })
       );
       await AsyncStorage.setItem('isTaken', JSON.stringify(true));
+      setHasSurvey(true)
       takeTest();
     } catch (error) {
       console.log(error);

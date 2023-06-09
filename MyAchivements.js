@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useLocalStorage } from './useLocalStorage';
 import { GlobalContext } from './GlobalContext';

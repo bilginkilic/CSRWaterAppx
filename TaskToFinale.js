@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet,ScrollView } from 'react-native';
 import { useLocalStorage } from './useLocalStorage';
 import { useNavigation ,useFocusEffect} from '@react-navigation/native';
 import { GlobalContext } from './GlobalContext';
@@ -127,7 +127,8 @@ const TaskToFinale = () => {
 
   
   return (
-    <View style={styles.container}>
+    
+      <ScrollView contentContainerStyle={styles.container}>
       <Text style={styles.title}>Tasks to Complete</Text>
 
       { selectedTasks.length > 0 ? ( selectedTasks.map((task) => (
@@ -147,7 +148,7 @@ const TaskToFinale = () => {
         <Text style={styles.emptyText}>Horray, nothing to do here! 🎉 If you want to do more go to tasks to select more tasks</Text>
       )}
  
-    </View>
+ </ScrollView>
   );
 };
 

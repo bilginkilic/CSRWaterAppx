@@ -6,8 +6,14 @@ const IntroPage = () => {
   const navigation = useNavigation();
 
   const handleStartSurveyPress = () => {
+    showAlert2()
     navigation.navigate('Task');
   };
+
+  const showAlert2 = () => {
+    Alert.alert('Info', 'You will have the survey only one time! Please answer them slowly', [{ text: 'OK' }], { cancelable: false });
+  };
+
 
   return (
     <View style={styles.container}>
