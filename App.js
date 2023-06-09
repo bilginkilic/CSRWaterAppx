@@ -97,7 +97,7 @@ function App() {
         if (data.userToken !== '') {
           setUserToken(data.userToken)
           dispatch({ type: 'SIGN_IN', token: data.userToken });
-          console.log('state:', state);
+         // console.log('state:', state);
         }
       },
       signOut: () => {

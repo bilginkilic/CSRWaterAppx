@@ -5,6 +5,8 @@ import { useLocalStorage } from './useLocalStorage';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { GlobalContext } from './GlobalContext';
+ 
+
 function ProfileScreen() {
   const { signOut } = React.useContext(AuthContext);
  // const [answers, setAnswers] = useLocalStorage('answers', []);
@@ -17,9 +19,9 @@ function ProfileScreen() {
   const [currentSavingValueText, setcurrentSavingValueText] = useState('currentSavingValueText', '');
   const [currentTotalValueText, setcurrentTotalValueText] = useState('currentTotalValueText', '');
 
-  const [username, setUsername, clearStorage, showAllLocalStorage] = useLocalStorage('username', '');
+  const [username, setUsername, clearStorage, saveAllToUserAttributes] = useLocalStorage('username', '');
 
- 
+
 
 
   const calculateValues = () => {
@@ -37,8 +39,8 @@ function ProfileScreen() {
 
 
     let comparisonText = '';
-    console.log(currentSavingValue)
-    console.log(savingValue)
+    // console.log(currentSavingValue)
+    // console.log(savingValue)
     if (currentSavingValue > savingValue && savingValue > 0 ) {
       let compSaving = (currentSavingValue-savingValue) / savingValue * 100;
       comparisonText = 'You have increased saved water by !' + compSaving.toFixed(2) + "%";
@@ -47,8 +49,8 @@ function ProfileScreen() {
       setcurrentSavingValueText('')
     }
 
-    console.log(currentTotalValue)
-    console.log(totalValue)
+   // console.log(currentTotalValue)
+   // console.log(totalValue)
     if (currentTotalValue < totalValue) {
       let compTotal = (totalValue-currentTotalValue) / totalValue * 100;
       comparisonText = 'You have decreased water footprint by !' + compTotal.toFixed(2) + "%";
@@ -62,14 +64,16 @@ function ProfileScreen() {
 
   useEffect(() => {
     console.log("maximus XF")
-    calculateValues();
-  }); 
+    
+    
+    calculateValues();saveAllToUserAttributes();
+  },[answers,saveAllToUserAttributes]); 
 
   useFocusEffect(
     React.useCallback(() => {
       console.log("maximus XR")
       calculateValues();
-    })
+    },[answers])
   );
 
  
@@ -135,7 +139,7 @@ function ProfileScreen() {
       </View>
 
 
-      <Text style={styles.infoText}>Your answers are updated. {answers.length} </Text>
+      {/* <Text style={styles.infoText}>Your answers are updated. {answers.length} </Text> */}
 
       <TouchableOpacity style={styles.signOutButton} onPress={signOut}>
         <Text style={styles.signOutButtonText}>Sign Out</Text>

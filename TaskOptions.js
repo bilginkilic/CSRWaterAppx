@@ -9,7 +9,7 @@ const TaskOptions = ({ route, navigation }) => {
   const [selectedTasks, setSelectedTasks] = useLocalStorage('selectedTasks', []);
   const { globalArray, setGlobalArray } = useContext(GlobalContext);
   const tasks = answers.filter((answer) => answer.type === 'Task');
-  console.log("task op.",tasks)
+ // console.log("task op.",tasks)
   const toggleTaskSelection = (taskId, task) => {
     const isSelected = selectedTasks.some((selectedTask) => selectedTask.question == task.question);
     if (isSelected) {

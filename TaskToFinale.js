@@ -118,7 +118,7 @@ const TaskToFinale = () => {
   
   useFocusEffect(
     React.useCallback(() => {
-      console.log("welcome back cr",globalArray)
+      //console.log("welcome back cr",globalArray)
       // Update selectedTasks whenever the screen gains focus
       setSelectedTasks(globalArray);
     }, [setSelectedTasks,globalArray])

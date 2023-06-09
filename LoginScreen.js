@@ -28,7 +28,7 @@ const LoginScreen = () => {
         Alert.alert('WARN','Username or password must be filled.')
       }else{
         const user = await Auth.signIn(username, password);
-        console.log('user signed in: ', user.userDataKey);
+       // console.log('user signed in: ', user.userDataKey);
         signIn({ userToken:user.Session  });
       }
     

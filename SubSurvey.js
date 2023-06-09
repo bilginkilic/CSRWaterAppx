@@ -12,7 +12,7 @@ const SubSurvey = ({ navigation, route }) => {
 
 
   useEffect(() => {
-    console.log('Updated selectedTasks:', selectedTasks);
+    //console.log('Updated selectedTasks:', selectedTasks);
     setGlobalArray(selectedTasks)
   }, [selectedTasks]);
 
@@ -20,7 +20,7 @@ const SubSurvey = ({ navigation, route }) => {
   const handleOptionSelection = (answer, opt) => {
     setSelectedOption(opt);
 
-console.log("MJS",opt)
+//console.log("MJS",opt)
     //update the answers
 
     const questionIdToUpdate = question.id;
