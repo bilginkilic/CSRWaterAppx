@@ -4,10 +4,11 @@ import { AuthContext } from './AuthContext';
 import { useLocalStorage } from './useLocalStorage';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
-
+import { GlobalContext } from './GlobalContext';
 function ProfileScreen() {
   const { signOut } = React.useContext(AuthContext);
-  const [answers, setAnswers] = useLocalStorage('answers', []);
+ // const [answers, setAnswers] = useLocalStorage('answers', []);
+ const { answers, setAnswers } = useContext(GlobalContext);
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
 

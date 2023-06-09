@@ -1,4 +1,6 @@
-import * as React from 'react';
+//import * as React from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { useNavigation, useFocusEffect } from '@react-navigation/native';
 
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -9,7 +11,7 @@ import FeedScreen from './FeedScreen.js';
 
  
 import MyTask from './MyTask';
-
+import { GlobalContext } from './GlobalContext';
 MaterialCommunityIcons.loadFont(); 
 
 
@@ -19,15 +21,25 @@ MaterialCommunityIcons.loadFont();
 
 
 function MainScreenToFinale() {
+  const navigation = useNavigation();
+ // const [answers, setAnswers] = useLocalStorage('answers', []);
+ const { answers, setAnswers } = useContext(GlobalContext);
+ const [remainingTaskList, setRemainingTaskList] = React.useState([]);
 
- 
   const Tab = createBottomTabNavigator();
-  const [taskIndex, setTaskIndex] = useLocalStorage('taskIndex', 0);
-  const [remaningTask, setRemainingTask] =  useLocalStorage('remaningTask', 21); 
  
-  //   useEffect(() => {
-  //     setRemainingTask(21-taskIndex)
-  // }, [ taskIndex]);
+
+  React.useEffect(() => {
+    const filteredTasks = answers.filter((answer) => answer.type === 'Task' && answer.completed === false);
+    setRemainingTaskList(filteredTasks);
+  }, [answers]);
+
+  useFocusEffect(
+    React.useCallback(() => {
+      navigation.setParams({ remainingTaskCount: remainingTaskList.length });
+    }, [navigation, remainingTaskList])
+  );
+
 
   return (
 
@@ -57,7 +69,7 @@ function MainScreenToFinale() {
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="bell" color={color} size={size} />
           ),
-          tabBarBadge: 21,
+          tabBarBadge: remainingTaskList.length ,
         }}
       />
       <Tab.Screen

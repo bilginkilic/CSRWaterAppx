@@ -1,13 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import { AsyncStorage } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { useLocalStorage } from './useLocalStorage';
-
+import { GlobalContext } from './GlobalContext';
 const Wizard = () => {
   const { takeTest } = React.useContext(AuthContext);
   const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
-  const [answers, setAnswers] = useLocalStorage('answers', []);
+  //const [answers, setAnswers] = useLocalStorage('answers', []);
+  const { answers, setAnswers } = useContext(GlobalContext);
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
   const [questionsw, setQuestionsw] = useState(  [

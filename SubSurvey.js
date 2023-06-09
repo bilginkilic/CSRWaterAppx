@@ -6,7 +6,8 @@ const SubSurvey = ({ navigation, route }) => {
   const question = route.params;
   const [selectedOption, setSelectedOption] = useState(null);
   const { globalArray, setGlobalArray } = useContext(GlobalContext);
-  const [answers, setAnswers] = useLocalStorage('answers', []);
+  //const [answers, setAnswers] = useLocalStorage('answers', []);
+  const { answers, setAnswers } = useContext(GlobalContext);
   const [selectedTasks, setSelectedTasks] = useLocalStorage('selectedTasks', []);
 
 

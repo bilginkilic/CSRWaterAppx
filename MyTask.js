@@ -1,12 +1,13 @@
-import React, { useState ,useEffect} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, ImageBackground } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import tasks from './TasksOrjinal';
-import { useLocalStorage } from './useLocalStorage';
+import { GlobalContext } from './GlobalContext';
 const MyTaskScreen = () => {
   const navigation = useNavigation();
   const [selectedCategory, setSelectedCategory] = useState(null);
-  const [answers, setAnswers] = useLocalStorage('answers', []);
+  //const [answers, setAnswers] = useLocalStorage('answers', []);
+  const { answers, setAnswers } = useContext(GlobalContext);
   const remainingTaskList = answers.filter((answer) => answer.type === 'Task' && answer.completed == false);
   const handleSelectCategory = (category) => {
     navigation.navigate('TaskOptions', { categoryId: category });
@@ -103,13 +104,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     textAlign: 'center',
     fontWeight: 'bold',
-    fontSize: 18, // Adjust the font size to your preference
+    fontSize: 24, // Adjust the font size to your preference
   },
   imageBackground: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20, // Add padding to make the image more visible
+    padding: 0.5, // Add padding to make the image more visible
   },
   image: {
     resizeMode: 'cover',

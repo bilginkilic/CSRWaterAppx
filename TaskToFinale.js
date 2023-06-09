@@ -134,8 +134,8 @@ const TaskToFinale = () => {
         <TouchableOpacity
           key={task.questionid}
           style={[
-            styles.task,
-            task.completed && styles.completedTask,
+            styles.task
+          //  task.completed && styles.completedTask,
           ]}
           onPress={() => handleTaskSelection(task)}
         >

@@ -13,7 +13,8 @@ import TaskToFinale from './TaskToFinale';
 import MyAchivements from './MyAchivements';
 import TaskOptions from './TaskOptions';
 import SubSurvey from './SubSurvey'
-import { GlobalProvider } from './GlobalContext';
+import { GlobalProvider ,GlobalContext} from './GlobalContext';
+ 
 const Stack = createStackNavigator();
 
 function App() {
@@ -23,11 +24,13 @@ function App() {
   const [userToken, setUserToken] = useLocalStorage('userToken', '');
   const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
   const [answers, setAnswers] = useLocalStorage('answers', []);
+ // const { answers, setAnswers } = useContext(GlobalContext);
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
   const [questions, setQuestions] = useLocalStorage('questions', []);
   const [questionsw, setQuestionsw] = useLocalStorage('questionsw', []);
   const [selectedTasks, setSelectedTasks] = useLocalStorage('selectedTasks', []);
+ // const { globalArray, setGlobalArray } = useContext(GlobalContext);
   const [state, dispatch] = React.useReducer(
     (prevState, action) => {
       switch (action.type) {

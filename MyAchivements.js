@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import { useLocalStorage } from './useLocalStorage';
-
+import { GlobalContext } from './GlobalContext';
 const MyAchivements = () => {
-  const [answers, setAnswers] = useLocalStorage('answers', []);
-
+  //const [answers, setAnswers] = useLocalStorage('answers', []);
+  const { answers, setAnswers } = useContext(GlobalContext);
   // Filter the answers array to get only the achievements
   const achievements = answers.filter((answer) => answer.type === 'Achievement');
 

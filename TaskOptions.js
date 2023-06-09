@@ -4,7 +4,8 @@ import { useLocalStorage } from './useLocalStorage';
 import { GlobalContext } from './GlobalContext';
 const TaskOptions = ({ route, navigation }) => {
   const { categoryId } = route.params;
-  const [answers, setAnswers] = useLocalStorage('answers', []);
+  //const [answers, setAnswers] = useLocalStorage('answers', []);
+  const { answers, setAnswers } = useContext(GlobalContext);
   const [selectedTasks, setSelectedTasks] = useLocalStorage('selectedTasks', []);
   const { globalArray, setGlobalArray } = useContext(GlobalContext);
   const tasks = answers.filter((answer) => answer.type === 'Task');
@@ -63,9 +64,9 @@ const TaskOptions = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
+    padding: 10,
+    justifyContent: 'flex-start',
     alignItems: 'center',
-    justifyContent: 'center',
   },
   taskItem: {
     padding: 8,
