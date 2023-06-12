@@ -91,7 +91,7 @@ function App() {
       dispatch({ type: 'RESTORE_TOKEN', token: userToken, hasSurvey: hasSurvey });
     };
     bootstrapAsync();
-  }, [hasSurvey]);
+  }, [userToken,hasSurvey]);
 
   const authContext = React.useMemo(
     () => ({

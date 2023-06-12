@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { GlobalContext } from './GlobalContext';
  
-
+import { Auth } from 'aws-amplify';
 function ProfileScreen() {
   const { signOut } = React.useContext(AuthContext);
  // const [answers, setAnswers] = useLocalStorage('answers', []);
@@ -63,18 +63,42 @@ function ProfileScreen() {
   };
 
   useEffect(() => {
-    console.log("maximus XF")
+    console.log(" XF")
     
     
-    calculateValues();saveAllToUserAttributes();
-  },[answers,saveAllToUserAttributes]); 
+    calculateValues();  saveUserDataToAttributes();
+  },[answers]); 
 
   useFocusEffect(
     React.useCallback(() => {
-      console.log("maximus XR")
+      console.log(" XR")
       calculateValues();
+    
     },[answers])
   );
+
+  const saveUserDataToAttributes = async () => {
+    try {
+      console.log('User attributes  on go  ');
+      var datax ={
+        hassurvey: true,
+        savingValue:savingValue,
+        totalValue:totalValue,
+        currentSavingValue:currentSavingValue,
+        currentTotalValue:currentTotalValue,
+        remainintasks:answers.length
+      }
+      const user = await Auth.currentAuthenticatedUser();
+      const attributes = {
+        ...user.attributes, // Retrieve existing attributes
+        ...datax, // Add or update new attributes
+      };
+      await Auth.updateUserAttributes(user, attributes);
+      console.log('User attributes updated successfully');
+    } catch (error) {
+      console.log('Error updating user attributes:', error);
+    }
+  };
 
  
   return (
@@ -144,7 +168,9 @@ function ProfileScreen() {
       <TouchableOpacity style={styles.signOutButton} onPress={signOut}>
         <Text style={styles.signOutButtonText}>Sign Out</Text>
       </TouchableOpacity>
-    
+      <TouchableOpacity style={styles.signOutButton} onPress={saveUserDataToAttributes}>
+        <Text style={styles.signOutButtonText}>Sdeneme</Text>
+      </TouchableOpacity>
     </View>
   );
 }
