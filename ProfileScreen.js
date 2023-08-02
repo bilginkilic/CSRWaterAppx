@@ -21,14 +21,16 @@ import config from './src/aws-exports';
 
 
 function ProfileScreen() { 
+  // Calculate and save data every 5 seconds
+ 
   const { signOut } = React.useContext(AuthContext);
   // const [answers, setAnswers] = useLocalStorage('answers', []);
   const { answers, setAnswers } = useContext(GlobalContext);
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
 
-  const [currentSavingValue, setcurrentSavingValue] = useState('currentSavingValue', 0);
-  const [currentTotalValue, setcurrentTotalValue] = useState('currentTotalValue', 0);
+  const [currentSavingValue, setcurrentSavingValue] = useLocalStorage('currentSavingValue', 0);
+  const [currentTotalValue, setcurrentTotalValue] = useLocalStorage('currentTotalValue', 0);
   const [currentSavingValueText, setcurrentSavingValueText] = useState('currentSavingValueText', '');
   const [currentTotalValueText, setcurrentTotalValueText] = useState('currentTotalValueText', '');
 
@@ -73,25 +75,9 @@ function ProfileScreen() {
 
   };
 
-  async function currentSession() {
-    try {
-      const data = await Auth.currentSession();
-      console.log(data);
-    } catch(err) {
-      console.log(err);
-    }
-  };
+ 
 
-  async function currentAuthenticatedUser() {
-    try {
-      const user = Auth.currentAuthenticatedUser({
-        bypassCache: false // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-      });
-      console.log(user)
-    } catch(err) {
-      console.log(err);
-    }
-  };
+ 
 
   const saveUserDataToAttributes = async () => {
 
@@ -99,34 +85,52 @@ function ProfileScreen() {
     try {
  
  
-
+      calculateValues();
       // DataStore.configure({
       //   storageAdapter: SQLiteAdapter
       // });
-    //  const r= await DataStore.save(
-    //     new Statisticx({
-    //       "username": "Lorem ipsum dolor sit amet",
-    //       "savedvalue": 123.45,
-    //       "totalvalue": 123.45,
-    //       "currerntsavedvalue": 123.45,
-    //       "currentotalvalue": 123.45,
-    //       "startdate": "1970-01-01T12:30:23.999Z",
-    //       "visitcount": 1020,
-    //       "lastupdatetime": "1970-01-01T12:30:23.999Z"
-    //     })
-    //   );
-  //   const r=await DataStore.save(
-  //     new Todo({
-  //     "masa": "Lorem ipsum dolor sit amet"
-  //   })
-  // );
+   
+ 
 
  
 
      //  console.log('Post saved successfully!',r);
-
+     const currentTime = new Date().toISOString();
  
-      const posts = await DataStore.query(Statisticx);
+      const posts = await DataStore.query(Statisticx,(c)=> c.username.eq (username));
+      if(posts.length >0){
+        const updatedUserData = posts[0];
+      
+  
+        const updatedPost = await DataStore.save(
+          Statisticx.copyOf(updatedUserData, updated => {
+            updated.savedvalue = savingValue;
+            updated.totalvalue = totalValue;
+            updated.currerntsavedvalue = currentSavingValue;
+            updated.currentotalvalue = currentTotalValue;
+            updated.lastupdatetime = currentTime;
+            updated.visitcount +=  updatedUserData.visitcount+1;
+          })
+        );
+        console.log('User data updated successfully!', updatedPost);
+     
+
+
+      }else{
+        const r= await DataStore.save(
+          new Statisticx({
+            "username": username,
+            "savedvalue": savingValue,
+            "totalvalue": totalValue,
+            "currerntsavedvalue": currentSavingValue,
+            "currentotalvalue": currentTotalValue,
+            "startdate": currentTime,
+            "visitcount": 1,
+            "lastupdatetime": currentTime
+          })
+        );
+
+      }
       console.log('Posts retrieved successfully!', JSON.stringify(posts, null, 2));
     
     } catch (error) {
@@ -199,11 +203,14 @@ function ProfileScreen() {
 
 
 
+    
+     
+      <TouchableOpacity style={styles.signOutButton} onPress={saveUserDataToAttributes}>
+        <Text style={styles.signOutButtonText}>Submit my data to dashboard</Text>
+      </TouchableOpacity>
+      <Text style={styles.signOutButtonText}></Text>
       <TouchableOpacity style={styles.signOutButton} onPress={signOut}>
         <Text style={styles.signOutButtonText}>Sign Out</Text>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.signOutButton} onPress={saveUserDataToAttributes}>
-        <Text style={styles.signOutButtonText}>Sdeneme</Text>
       </TouchableOpacity>
     </View>
   );
