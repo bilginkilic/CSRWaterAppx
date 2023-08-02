@@ -308,7 +308,7 @@ PODS:
     - React-Core
   - react-native-ionicons (4.6.5):
     - React
-  - react-native-netinfo (9.3.7):
+  - react-native-netinfo (9.4.1):
     - React-Core
   - react-native-pdf (6.6.2):
     - React-Core
@@ -318,6 +318,8 @@ PODS:
     - RCTTypeSafety
     - React-Core
     - ReactCommon/turbomodule/core
+  - react-native-sqlite-storage (6.0.1):
+    - React-Core
   - react-native-webview (11.26.0):
     - React-Core
   - React-perflogger (0.70.6)
@@ -386,9 +388,9 @@ PODS:
     - React-jsi (= 0.70.6)
     - React-logger (= 0.70.6)
     - React-perflogger (= 0.70.6)
-  - RNAWSCognito (6.1.2):
+  - RNAWSCognito (6.3.1):
     - React-Core
-  - RNCAsyncStorage (1.17.11):
+  - RNCAsyncStorage (1.19.1):
     - React-Core
   - RNCMaskedView (0.1.11):
     - React
@@ -459,6 +461,7 @@ DEPENDENCIES:
   - "react-native-netinfo (from `../node_modules/@react-native-community/netinfo`)"
   - react-native-pdf (from `../node_modules/react-native-pdf`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
+  - react-native-sqlite-storage (from `../node_modules/react-native-sqlite-storage`)
   - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native/Libraries/ActionSheetIOS`)
@@ -554,6 +557,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-pdf"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
+  react-native-sqlite-storage:
+    :path: "../node_modules/react-native-sqlite-storage"
   react-native-webview:
     :path: "../node_modules/react-native-webview"
   React-perflogger:
@@ -635,9 +640,10 @@ SPEC CHECKSUMS:
   react-native-blob-util: 4949dcc0dd5ee25fcb5abe0687f67fa3d5cdf05a
   react-native-document-picker: 958e2bc82e128be69055be261aeac8d872c8d34c
   react-native-ionicons: 7ce04a8e61c6de2fc3b6798e8b9621b865cb18b1
-  react-native-netinfo: 2517ad504b3d303e90d7a431b0fcaef76d207983
+  react-native-netinfo: fefd4e98d75cbdd6e85fc530f7111a8afdf2b0c5
   react-native-pdf: 33c622cbdf776a649929e8b9d1ce2d313347c4fa
   react-native-safe-area-context: 99b24a0c5acd0d5dcac2b1a7f18c49ea317be99a
+  react-native-sqlite-storage: f6d515e1c446d1e6d026aa5352908a25d4de3261
   react-native-webview: 994b9f8fbb504d6314dc40d83f94f27c6831b3bf
   React-perflogger: 8c79399b0500a30ee8152d0f9f11beae7fc36595
   React-RCTActionSheet: 7316773acabb374642b926c19aef1c115df5c466
@@ -651,8 +657,8 @@ SPEC CHECKSUMS:
   React-RCTVibration: c75ceef7aa60a33b2d5731ebe5800ddde40cefc4
   React-runtimeexecutor: 15437b576139df27635400de0599d9844f1ab817
   ReactCommon: 349be31adeecffc7986a0de875d7fb0dcf4e251c
-  RNAWSCognito: 06ca81fa480fd7f9ff539d01bc41f9d531ff0a19
-  RNCAsyncStorage: 8616bd5a58af409453ea4e1b246521bb76578d60
+  RNAWSCognito: 5687577d12900389a893a9705ce31b6fa71c3805
+  RNCAsyncStorage: f47fe18526970a69c34b548883e1aeceb115e3e1
   RNCMaskedView: 0e1bc4bfa8365eba5fbbb71e07fbdc0555249489
   RNFS: 4ac0f0ea233904cb798630b3c077808c06931688
   RNGestureHandler: 62232ba8f562f7dea5ba1b3383494eb5bf97a4d3
@@ -664,4 +670,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: bf6b48422be21b6d6c1cfcff9d2556309d2de9b3
 
-COCOAPODS: 1.11.3
+COCOAPODS: 1.12.1

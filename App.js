@@ -6,19 +6,24 @@ import MainScreen from './MainScreen';
 import SplashScreen from './SplashScreen';
 import { AuthContext } from './AuthContext';
 import MainScreenToFinale from './MainScreenToFinale';
-import { Amplify } from 'aws-amplify';
-import config from './src/aws-exports';
+
 import { useLocalStorage } from './useLocalStorage';
 import TaskToFinale from './TaskToFinale';
 import MyAchivements from './MyAchivements';
 import TaskOptions from './TaskOptions';
 import SubSurvey from './SubSurvey'
 import { GlobalProvider, GlobalContext } from './GlobalContext';
+import { withAuthenticator } from "aws-amplify-react"
+
+import { Amplify } from 'aws-amplify';
+import config from './src/aws-exports';
+Amplify.configure(config);
+
 
 const Stack = createStackNavigator();
 
 function App() {
-  Amplify.configure(config);
+
 
   const [hasSurvey, setHasSurvey] = useLocalStorage('hasSurvey', false);
   const [userToken, setUserToken] = useLocalStorage('userToken', '');
@@ -99,7 +104,7 @@ function App() {
         if (data.userToken !== '') {
           setUserToken(data.userToken)
           dispatch({ type: 'SIGN_IN', token: data.userToken,hasSurvey: hasSurvey });
-           console.log('state:', state);
+          // console.log('state:', state);
         }
       },
       signOut: () => {
@@ -196,4 +201,4 @@ function App() {
   );
 }
 
-export default App;
+export default   App;

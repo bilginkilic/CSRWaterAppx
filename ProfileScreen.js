@@ -2,15 +2,28 @@ import React, { useState, useEffect, useContext } from 'react';
 import { View, Text, Button, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { useLocalStorage } from './useLocalStorage';
-import Icon from 'react-native-vector-icons/FontAwesome';
-import { useNavigation, useFocusEffect } from '@react-navigation/native';
-import { GlobalContext } from './GlobalContext';
- 
 import { Auth } from 'aws-amplify';
-function ProfileScreen() {
+import { GlobalContext } from './GlobalContext';
+import 'core-js/full/symbol/async-iterator';
+
+import { SQLiteAdapter } from '@aws-amplify/datastore-storage-adapter/SQLiteAdapter';
+import { Statisticx,Todo } from './src/models';
+import { DataStore, Predicates } from "@aws-amplify/datastore";
+ 
+import { API, graphqlOperation } from 'aws-amplify';
+import { createTodo, updateTodo, deleteTodo } from './graphql/mutations';
+import config from './src/aws-exports';
+
+
+
+
+
+
+
+function ProfileScreen() { 
   const { signOut } = React.useContext(AuthContext);
- // const [answers, setAnswers] = useLocalStorage('answers', []);
- const { answers, setAnswers } = useContext(GlobalContext);
+  // const [answers, setAnswers] = useLocalStorage('answers', []);
+  const { answers, setAnswers } = useContext(GlobalContext);
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
 
@@ -19,7 +32,7 @@ function ProfileScreen() {
   const [currentSavingValueText, setcurrentSavingValueText] = useState('currentSavingValueText', '');
   const [currentTotalValueText, setcurrentTotalValueText] = useState('currentTotalValueText', '');
 
-  const [username, setUsername, clearStorage, saveAllToUserAttributes] = useLocalStorage('username', '');
+  const [username, setUsername] = useLocalStorage('username', '');
 
 
 
@@ -29,7 +42,7 @@ function ProfileScreen() {
     let currentTotalValue = 0;
     let currentSavingValue = 0;
 
-     answers.forEach((answer) => {
+    answers.forEach((answer) => {
       currentTotalValue += answer.total;
       currentSavingValue += answer.saving;
     });
@@ -39,68 +52,89 @@ function ProfileScreen() {
 
 
     let comparisonText = '';
-    // console.log(currentSavingValue)
-    // console.log(savingValue)
-    if (currentSavingValue > savingValue && savingValue > 0 ) {
-      let compSaving = (currentSavingValue-savingValue) / savingValue * 100;
+
+    if (currentSavingValue > savingValue && savingValue > 0) {
+      let compSaving = (currentSavingValue - savingValue) / savingValue * 100;
       comparisonText = 'You have increased saved water by !' + compSaving.toFixed(2) + "%";
       setcurrentSavingValueText(comparisonText)
     } else {
       setcurrentSavingValueText('')
     }
 
-   // console.log(currentTotalValue)
-   // console.log(totalValue)
+
     if (currentTotalValue < totalValue) {
-      let compTotal = (totalValue-currentTotalValue) / totalValue * 100;
+      let compTotal = (totalValue - currentTotalValue) / totalValue * 100;
       comparisonText = 'You have decreased water footprint by !' + compTotal.toFixed(2) + "%";
       setcurrentTotalValueText(comparisonText)
     } else {
       setcurrentTotalValueText('')
     }
 
-    console.log(comparisonText);
+
   };
 
-  useEffect(() => {
-    console.log(" XF")
-    
-    
-    calculateValues();  saveUserDataToAttributes();
-  },[answers]); 
-
-  useFocusEffect(
-    React.useCallback(() => {
-      console.log(" XR")
-      calculateValues();
-    
-    },[answers])
-  );
-
-  const saveUserDataToAttributes = async () => {
+  async function currentSession() {
     try {
-      console.log('User attributes  on go  ');
-      var datax ={
-        hassurvey: true,
-        savingValue:savingValue,
-        totalValue:totalValue,
-        currentSavingValue:currentSavingValue,
-        currentTotalValue:currentTotalValue,
-        remainintasks:answers.length
-      }
-      const user = await Auth.currentAuthenticatedUser();
-      const attributes = {
-        ...user.attributes, // Retrieve existing attributes
-        ...datax, // Add or update new attributes
-      };
-      await Auth.updateUserAttributes(user, attributes);
-      console.log('User attributes updated successfully');
-    } catch (error) {
-      console.log('Error updating user attributes:', error);
+      const data = await Auth.currentSession();
+      console.log(data);
+    } catch(err) {
+      console.log(err);
     }
   };
 
+  async function currentAuthenticatedUser() {
+    try {
+      const user = Auth.currentAuthenticatedUser({
+        bypassCache: false // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
+      });
+      console.log(user)
+    } catch(err) {
+      console.log(err);
+    }
+  };
+
+  const saveUserDataToAttributes = async () => {
+
  
+    try {
+ 
+ 
+
+      // DataStore.configure({
+      //   storageAdapter: SQLiteAdapter
+      // });
+    //  const r= await DataStore.save(
+    //     new Statisticx({
+    //       "username": "Lorem ipsum dolor sit amet",
+    //       "savedvalue": 123.45,
+    //       "totalvalue": 123.45,
+    //       "currerntsavedvalue": 123.45,
+    //       "currentotalvalue": 123.45,
+    //       "startdate": "1970-01-01T12:30:23.999Z",
+    //       "visitcount": 1020,
+    //       "lastupdatetime": "1970-01-01T12:30:23.999Z"
+    //     })
+    //   );
+  //   const r=await DataStore.save(
+  //     new Todo({
+  //     "masa": "Lorem ipsum dolor sit amet"
+  //   })
+  // );
+
+ 
+
+     //  console.log('Post saved successfully!',r);
+
+ 
+      const posts = await DataStore.query(Statisticx);
+      console.log('Posts retrieved successfully!', JSON.stringify(posts, null, 2));
+    
+    } catch (error) {
+      console.log('Error :', error);
+    }
+  };
+
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -115,37 +149,37 @@ function ProfileScreen() {
 
       <View style={styles.infoContainer}>
 
-      {currentSavingValueText !== '' ? (<>
-        <View style={styles.infoRow}>
-          <Text style={styles.infoText}>You saved</Text>
-          <Text style={styles.infoValue}>{currentSavingValue} L</Text>
-          <Text style={styles.infoText}>water!</Text>
-        </View>
-
-         </>) : (<>
+        {currentSavingValueText !== '' ? (<>
           <View style={styles.infoRow}>
-          <Text style={styles.infoText}>You saved</Text>
-          <Text style={styles.infoValue}>{savingValue} L</Text>
-          <Text style={styles.infoText}>water!</Text>
-        </View></>)}
+            <Text style={styles.infoText}>You saved</Text>
+            <Text style={styles.infoValue}>{currentSavingValue} L</Text>
+            <Text style={styles.infoText}>water!</Text>
+          </View>
 
-
-        {currentTotalValueText !== '' ? (<> 
-     
+        </>) : (<>
           <View style={styles.infoRow}>
-          <Text style={styles.infoText}>Your water footprint</Text>
-          <Text style={styles.infoValue}>{currentTotalValue} L!</Text>
-        </View>
-           </>) : (<>
-                
-        <View style={styles.infoRow}>
-          <Text style={styles.infoText}>Your water footprint</Text>
-          <Text style={styles.infoValue}>{totalValue} L!</Text>
-        </View>
-           
-           </>)}
+            <Text style={styles.infoText}>You saved</Text>
+            <Text style={styles.infoValue}>{savingValue} L</Text>
+            <Text style={styles.infoText}>water!</Text>
+          </View></>)}
 
-  
+
+        {currentTotalValueText !== '' ? (<>
+
+          <View style={styles.infoRow}>
+            <Text style={styles.infoText}>Your water footprint</Text>
+            <Text style={styles.infoValue}>{currentTotalValue} L!</Text>
+          </View>
+        </>) : (<>
+
+          <View style={styles.infoRow}>
+            <Text style={styles.infoText}>Your water footprint</Text>
+            <Text style={styles.infoValue}>{totalValue} L!</Text>
+          </View>
+
+        </>)}
+
+
         <View style={styles.infoRow}>
           <Text style={styles.infoText}>Istanbul dam fill rate </Text>
           <Text style={styles.infoValue}>95%</Text>
@@ -154,8 +188,8 @@ function ProfileScreen() {
           <Text style={styles.infoText}>{currentSavingValueText} </Text>
 
         </View>
-         </>) : (<></>)}
-        {currentTotalValueText !== '' ? (<> 
+        </>) : (<></>)}
+        {currentTotalValueText !== '' ? (<>
           <View style={styles.infoRow}>
 
             <Text style={styles.infoText}>{currentTotalValueText} </Text>
@@ -163,7 +197,7 @@ function ProfileScreen() {
       </View>
 
 
-      {/* <Text style={styles.infoText}>Your answers are updated. {answers.length} </Text> */}
+
 
       <TouchableOpacity style={styles.signOutButton} onPress={signOut}>
         <Text style={styles.signOutButtonText}>Sign Out</Text>

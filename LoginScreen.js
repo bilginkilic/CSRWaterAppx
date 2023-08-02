@@ -28,12 +28,38 @@ const LoginScreen = () => {
         Alert.alert('WARN','Username or password must be filled.')
       }else{
         const user = await Auth.signIn(username, password);
-       // console.log('user signed in: ', user.userDataKey);
+        console.log('user signed in: ', user);
+        if (user.challengeName === "NEW_PASSWORD_REQUIRED")
+         {
+        
+    
+          const loggedUser = await Auth.completeNewPassword(
+            user, // the Cognito User Object
+            '7654321'// the new password
+            
+          );
+          console.log(loggedUser)
+
         signIn({ userToken:user.Session  });
+        }else{
+
+
+          try {
+            const userx = Auth.currentAuthenticatedUser({
+              bypassCache: false // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
+            });
+            console.log("USER",JSON.stringify(userx))
+          } catch(err) {
+            console.log(err);
+          }
+          signIn({ userToken:user.Session  });
+        }
+ 
+
       }
     
     } catch (error) {
-      Alert.alert('OOPSS',error.message)
+      Alert.alert('OOPSS',error)
       //console.log('error signing in: ', error);
     }
   };
