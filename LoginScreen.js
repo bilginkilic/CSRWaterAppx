@@ -7,63 +7,39 @@ import { useLocalStorage } from './useLocalStorage';
 const { width, height } = Dimensions.get('window');
 
 const LoginScreen = () => {
- // const [username, setUsername] = React.useState('');
   const [username, setUsername] = useLocalStorage('username', '');
   const [password, setPassword] = React.useState('');
+  const [newPassword, setNewPassword] = React.useState('');
+  const [userWithChallenge, setUserWithChallenge] = React.useState(null); // Store user with challenge
 
-  const handleSignInDev = async () => {
-    try {
-        resetState();
-        signIn({ userToken:'OK' });
-    
-    
-    } catch (error) {
-      Alert.alert('OOPSS',error.message)
-      //console.log('error signing in: ', error);
-    }
-  };
   const handleSignIn = async () => {
     try {
-      if(username=='' || password==''){
-        Alert.alert('WARN','Username or password must be filled.')
-      }else{
+      if (username === '' || password === '') {
+        Alert.alert('WARN', 'Username or password must be filled.');
+      } else {
         const user = await Auth.signIn(username, password);
         console.log('user signed in: ', user);
-        if (user.challengeName === "NEW_PASSWORD_REQUIRED")
-         {
-        
-    
-          const loggedUser = await Auth.completeNewPassword(
-            user, // the Cognito User Object
-            '7654321'// the new password
-            
-          );
-          console.log(loggedUser)
-
-        signIn({ userToken:user.Session  });
-        }else{
-
-
-          try {
-            const userx = Auth.currentAuthenticatedUser({
-              bypassCache: false // Optional, By default is false. If set to true, this call will send a request to Cognito to get the latest user data
-            });
-            console.log("USER",JSON.stringify(userx))
-          } catch(err) {
-            console.log(err);
-          }
-          signIn({ userToken:user.Session  });
+        if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
+          setUserWithChallenge(user); // Store user with challenge
+        } else {
+          signIn({ userToken: user.Session });
         }
- 
-
       }
-    
     } catch (error) {
-      Alert.alert('OOPSS',error)
-      //console.log('error signing in: ', error);
+      Alert.alert('OOPSS', error.message);
     }
   };
-  
+
+  const handleNewPasswordSubmit = async () => {
+    try {
+      const loggedUser = await Auth.completeNewPassword(userWithChallenge, newPassword);
+      console.log(loggedUser);
+      signIn({ userToken: userWithChallenge.Session });
+    } catch (error) {
+      Alert.alert('OOPSS', error.message);
+    }
+  };
+
   const { resetState, signIn } = React.useContext(AuthContext);
 
   return (
@@ -88,20 +64,31 @@ const LoginScreen = () => {
         value={password}
         onChangeText={setPassword}
       />
-      {/* <TouchableOpacity style={styles.buttonContainer} onPress={handleSignInDev}>
+      {userWithChallenge && userWithChallenge.challengeName === 'NEW_PASSWORD_REQUIRED' && (
+        <TextInput
+          style={styles.input}
+          placeholder="New Password"
+          placeholderTextColor="#999"
+          secureTextEntry
+          autoCapitalize="none"
+          autoCorrect={false}
+          value={newPassword}
+          onChangeText={setNewPassword}
+        />
+      )}
+      <TouchableOpacity style={styles.buttonContainer} onPress={userWithChallenge?.challengeName === 'NEW_PASSWORD_REQUIRED' ? handleNewPasswordSubmit : handleSignIn}>
         <View>
-          <Text style={styles.buttonText}>LOGIN Quick</Text>
-        </View>
-      </TouchableOpacity>
-      <Text>Vs</Text>  */}
-      <TouchableOpacity style={styles.buttonContainer} onPress={handleSignIn}>
-        <View>
-          <Text style={styles.buttonText}>LOGIN </Text>
+          <Text style={styles.buttonText}>LOGIN</Text>
         </View>
       </TouchableOpacity>
     </View>
   );
 };
+
+// Rest of the code remains unchanged
+
+
+
 
 const styles = StyleSheet.create({
   container: {
