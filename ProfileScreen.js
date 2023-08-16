@@ -29,8 +29,8 @@ function ProfileScreen() {
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
 
-  const [currentSavingValue, setcurrentSavingValue] = useLocalStorage('currentSavingValue', 0);
-  const [currentTotalValue, setcurrentTotalValue] = useLocalStorage('currentTotalValue', 0);
+  const [currentSavingValue, setcurrentSavingValue] = useState('currentSavingValue', 0);
+  const [currentTotalValue, setcurrentTotalValue] = useState('currentTotalValue', 0);
   const [currentSavingValueText, setcurrentSavingValueText] = useState('currentSavingValueText', '');
   const [currentTotalValueText, setcurrentTotalValueText] = useState('currentTotalValueText', '');
 
@@ -48,7 +48,8 @@ function ProfileScreen() {
       currentTotalValue += answer.total;
       currentSavingValue += answer.saving;
     });
-
+ console.log("currentTotalValue",currentTotalValue);
+ console.log("currentSavingValue",currentSavingValue);
     setcurrentTotalValue(currentTotalValue);
     setcurrentSavingValue(currentSavingValue);
 
