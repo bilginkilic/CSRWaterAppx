@@ -110,7 +110,7 @@ function ProfileScreen() {
             updated.currerntsavedvalue = currentSavingValue;
             updated.currentotalvalue = currentTotalValue;
             updated.lastupdatetime = currentTime;
-            updated.visitcount +=  updatedUserData.visitcount+1;
+            updated.visitcount =  updatedUserData.visitcount+1;
           })
         );
         console.log('User data updated successfully!', updatedPost);
