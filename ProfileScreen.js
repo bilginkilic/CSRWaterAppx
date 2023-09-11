@@ -32,10 +32,10 @@ function ProfileScreen() {
   const [savingValueStoredToCloud, setSavingValueStoredToCloud] = useLocalStorage('savingValueStoredToCloud', 0);
   const [totalValueStoredToCloud, setTotalValueStoredToCloud] = useLocalStorage('totalValueStoredToCloud', 0);
 
-  const [currentSavingValue, setcurrentSavingValue] = useState('currentSavingValue', 0);
-  const [currentTotalValue, setcurrentTotalValue] = useState('currentTotalValue', 0);
-  const [currentSavingValueText, setcurrentSavingValueText] = useState('currentSavingValueText', '');
-  const [currentTotalValueText, setcurrentTotalValueText] = useState('currentTotalValueText', '');
+  const [currentSavingValue, setcurrentSavingValue] = useState('calculating...', 0);
+  const [currentTotalValue, setcurrentTotalValue] = useState('calculating...', 0);
+  const [currentSavingValueText, setcurrentSavingValueText] = useState('calculating...', '');
+  const [currentTotalValueText, setcurrentTotalValueText] = useState('calculating...', '');
 
  
 
