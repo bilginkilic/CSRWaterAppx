@@ -29,17 +29,36 @@ function ProfileScreen() {
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
 
+  const [savingValueStoredToCloud, setSavingValueStoredToCloud] = useLocalStorage('savingValueStoredToCloud', 0);
+  const [totalValueStoredToCloud, setTotalValueStoredToCloud] = useLocalStorage('totalValueStoredToCloud', 0);
+
   const [currentSavingValue, setcurrentSavingValue] = useState('currentSavingValue', 0);
   const [currentTotalValue, setcurrentTotalValue] = useState('currentTotalValue', 0);
   const [currentSavingValueText, setcurrentSavingValueText] = useState('currentSavingValueText', '');
   const [currentTotalValueText, setcurrentTotalValueText] = useState('currentTotalValueText', '');
 
+ 
+
   const [username, setUsername] = useLocalStorage('username', '');
 
 
+// useEffect(()=>{
+//   calculateValues();
+// },[savingValue,totalValue,currentSavingValue,currentTotalValue]);
 
+useEffect(() => {
+  const interval = setInterval(() => {
+     calculateValues();
+  }, 5000); // Change tip every 20 seconds
+
+  return () => {
+    clearInterval(interval); // Clear the interval when the component unmounts
+  };
+}, [savingValue,totalValue,savingValueStoredToCloud,totalValueStoredToCloud]);
 
   const calculateValues = () => {
+
+
 
     let currentTotalValue = 0;
     let currentSavingValue = 0;
@@ -48,8 +67,8 @@ function ProfileScreen() {
       currentTotalValue += answer.total;
       currentSavingValue += answer.saving;
     });
- console.log("currentTotalValue",currentTotalValue);
- console.log("currentSavingValue",currentSavingValue);
+//  console.log("currentTotalValue",currentTotalValue);
+//  console.log("currentSavingValue",currentSavingValue);
     setcurrentTotalValue(currentTotalValue);
     setcurrentSavingValue(currentSavingValue);
 
@@ -57,6 +76,7 @@ function ProfileScreen() {
     let comparisonText = '';
 
     if (currentSavingValue > savingValue && savingValue > 0) {
+     
       let compSaving = (currentSavingValue - savingValue) / savingValue * 100;
       comparisonText = 'You have increased saved water by !' + compSaving.toFixed(2) + "%";
       setcurrentSavingValueText(comparisonText)
@@ -66,11 +86,19 @@ function ProfileScreen() {
 
 
     if (currentTotalValue < totalValue) {
+     
       let compTotal = (totalValue - currentTotalValue) / totalValue * 100;
       comparisonText = 'You have decreased water footprint by !' + compTotal.toFixed(2) + "%";
       setcurrentTotalValueText(comparisonText)
     } else {
       setcurrentTotalValueText('')
+    }
+
+    if(totalValue != totalValueStoredToCloud || savingValue != savingValueStoredToCloud){
+      console.log("go to db",totalValue , totalValueStoredToCloud , savingValue, savingValueStoredToCloud);
+      saveUserDataToAttributes();
+    }else{
+      console.log("no db",totalValue , totalValueStoredToCloud , savingValue, savingValueStoredToCloud)
     }
 
 
@@ -85,16 +113,7 @@ function ProfileScreen() {
  
     try {
  
- 
-      calculateValues();
-      // DataStore.configure({
-      //   storageAdapter: SQLiteAdapter
-      // });
-   
- 
-
- 
-
+  
      //  console.log('Post saved successfully!',r);
      const currentTime = new Date().toISOString();
  
@@ -133,7 +152,8 @@ function ProfileScreen() {
 
       }
       console.log('Posts retrieved successfully!', JSON.stringify(posts, null, 2));
-    
+      setTotalValueStoredToCloud(totalValue);
+      setSavingValueStoredToCloud(savingValue);
     } catch (error) {
       console.log('Error :', error);
     }
@@ -206,9 +226,9 @@ function ProfileScreen() {
 
     
      
-      <TouchableOpacity style={styles.signOutButton} onPress={saveUserDataToAttributes}>
+      {/* <TouchableOpacity style={styles.signOutButton} onPress={saveUserDataToAttributes}>
         <Text style={styles.signOutButtonText}>Submit my data to dashboard</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
       <Text style={styles.signOutButtonText}></Text>
       <TouchableOpacity style={styles.signOutButton} onPress={signOut}>
         <Text style={styles.signOutButtonText}>Sign Out</Text>
