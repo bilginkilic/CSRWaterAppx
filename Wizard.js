@@ -4,6 +4,8 @@ import { AsyncStorage } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { useLocalStorage } from './useLocalStorage';
 import { GlobalContext } from './GlobalContext';
+import { Statisticx,Todo } from './src/models';
+import { DataStore, Predicates } from "@aws-amplify/datastore";
 const Wizard = () => {
   const { takeTest } = React.useContext(AuthContext);
   const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
@@ -172,6 +174,7 @@ useEffect(() => {
         JSON.stringify({ savingValue: savingValue, totalValue: totalValue })
       );
       await AsyncStorage.setItem('isTaken', JSON.stringify(true));
+      saveUserDataToAttributes();
       setHasSurvey(true)
       takeTest();
     } catch (error) {
@@ -179,6 +182,58 @@ useEffect(() => {
       alert('Failed to save answers. Please try again.');
     }
   };
+
+  const saveUserDataToAttributes = async () => {
+
+ 
+    try {
+ 
+  
+     //  console.log('Post saved successfully!',r);
+     const currentTime = new Date().toISOString();
+ 
+      const posts = await DataStore.query(Statisticx,(c)=> c.username.eq (username));
+      if(posts.length >0){
+        const updatedUserData = posts[0];
+      
+  
+        const updatedPost = await DataStore.save(
+          Statisticx.copyOf(updatedUserData, updated => {
+            updated.savedvalue = savingValue;
+            updated.totalvalue = totalValue;
+            updated.currerntsavedvalue = savingValue;
+            updated.currentotalvalue = totalValue;
+            updated.lastupdatetime = currentTime;
+            updated.visitcount =   1;
+          })
+        );
+        console.log('User data updated successfully!', updatedPost);
+     
+
+
+      }else{
+        const r= await DataStore.save(
+          new Statisticx({
+            "username": username,
+            "savedvalue": savingValue,
+            "totalvalue": totalValue,
+            "currerntsavedvalue": savingValue,
+            "currentotalvalue": totalValue,
+            "startdate": currentTime,
+            "visitcount": 1,
+            "lastupdatetime": currentTime
+          })
+        );
+
+      }
+      console.log('Posts retrieved successfully!', JSON.stringify(posts, null, 2));
+      
+      
+    } catch (error) {
+      console.log('Error :', error);
+    }
+  };
+
    
  
   const currentQuestion = questionsw[questionIndex];

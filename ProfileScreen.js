@@ -32,8 +32,8 @@ function ProfileScreen() {
   const [savingValueStoredToCloud, setSavingValueStoredToCloud] = useLocalStorage('savingValueStoredToCloud', 0);
   const [totalValueStoredToCloud, setTotalValueStoredToCloud] = useLocalStorage('totalValueStoredToCloud', 0);
 
-  const [currentSavingValue, setcurrentSavingValue] = useState('calculating...', 0);
-  const [currentTotalValue, setcurrentTotalValue] = useState('calculating...', 0);
+  const [currentSavingValue, setcurrentSavingValue] = useState(0);
+  const [currentTotalValue, setcurrentTotalValue] = useState(0);
   const [currentSavingValueText, setcurrentSavingValueText] = useState('calculating...', '');
   const [currentTotalValueText, setcurrentTotalValueText] = useState('calculating...', '');
 
@@ -61,7 +61,7 @@ useEffect(() => {
 
 
     let currentTotalValue = 0;
-    let currentSavingValue = 0;
+      let currentSavingValue = 0;
 
     answers.forEach((answer) => {
       currentTotalValue += answer.total;
@@ -94,11 +94,13 @@ useEffect(() => {
       setcurrentTotalValueText('')
     }
 
-    if(totalValue != totalValueStoredToCloud || savingValue != savingValueStoredToCloud){
+
+    //console.log("no db",totalValue , totalValueStoredToCloud , savingValue, savingValueStoredToCloud,currentSavingValue, currentTotalValue)
+    if(currentTotalValue != totalValueStoredToCloud || currentSavingValue != savingValueStoredToCloud){
       console.log("go to db",totalValue , totalValueStoredToCloud , savingValue, savingValueStoredToCloud);
       saveUserDataToAttributes();
     }else{
-      console.log("no db",totalValue , totalValueStoredToCloud , savingValue, savingValueStoredToCloud)
+      console.log("no db",totalValue , totalValueStoredToCloud , savingValue, savingValueStoredToCloud,currentSavingValue, currentTotalValue)
     }
 
 
@@ -113,7 +115,10 @@ useEffect(() => {
  
     try {
  
-  
+  if(username ===""){
+    console.log('user name not retrived');
+    return;
+  }
      //  console.log('Post saved successfully!',r);
      const currentTime = new Date().toISOString();
  
@@ -124,8 +129,8 @@ useEffect(() => {
   
         const updatedPost = await DataStore.save(
           Statisticx.copyOf(updatedUserData, updated => {
-            updated.savedvalue = savingValue;
-            updated.totalvalue = totalValue;
+            //updated.savedvalue = savingValue;
+            //updated.totalvalue = totalValue;
             updated.currerntsavedvalue = currentSavingValue;
             updated.currentotalvalue = currentTotalValue;
             updated.lastupdatetime = currentTime;
@@ -134,7 +139,8 @@ useEffect(() => {
         );
         console.log('User data updated successfully!', updatedPost);
      
-
+        setTotalValueStoredToCloud(currentTotalValue);
+        setSavingValueStoredToCloud(currentSavingValue);
 
       }else{
         const r= await DataStore.save(
@@ -152,8 +158,8 @@ useEffect(() => {
 
       }
       console.log('Posts retrieved successfully!', JSON.stringify(posts, null, 2));
-      setTotalValueStoredToCloud(totalValue);
-      setSavingValueStoredToCloud(savingValue);
+      setTotalValueStoredToCloud(currentTotalValue);
+      setSavingValueStoredToCloud(currentSavingValue);
     } catch (error) {
       console.log('Error :', error);
     }
