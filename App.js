@@ -24,7 +24,7 @@ const Stack = createStackNavigator();
 
 function App() {
 
-
+  const [username, setUsername] = useLocalStorage('username', '');
   const [hasSurvey, setHasSurvey] = useLocalStorage('hasSurvey', false);
   const [userToken, setUserToken] = useLocalStorage('userToken', '');
   const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
@@ -102,8 +102,10 @@ function App() {
     () => ({
       signIn: async (data) => {
         if (data.userToken !== '') {
-          setUserToken(data.userToken)
+          setUserToken(data.userToken);
+           
           dispatch({ type: 'SIGN_IN', token: data.userToken,hasSurvey: hasSurvey });
+           
           // console.log('state:', state);
         }
       },
@@ -111,7 +113,7 @@ function App() {
 
 
         setUserToken('')
-
+        setUsername('')
         dispatch({ type: 'SIGN_OUT',hasSurvey:false})
       }
 

@@ -54,7 +54,7 @@ useEffect(() => {
   return () => {
     clearInterval(interval); // Clear the interval when the component unmounts
   };
-}, [savingValue,totalValue,savingValueStoredToCloud,totalValueStoredToCloud]);
+}, [savingValue,totalValue,savingValueStoredToCloud,totalValueStoredToCloud,username,currentSavingValue,currentTotalValue,answers]);
 
   const calculateValues = () => {
 
@@ -114,8 +114,8 @@ useEffect(() => {
 
  
     try {
- 
-  if(username ===""){
+      console.log("usernamex",username)
+  if(username ==="" || username ==="-"){
     console.log('user name not retrived');
     return;
   }

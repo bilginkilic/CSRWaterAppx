@@ -24,7 +24,9 @@ const LoginScreen = () => {
         if (user.challengeName === 'NEW_PASSWORD_REQUIRED') {
           setUserWithChallenge(user); // Store user with challenge
         } else {
+          setUsername(username)
           signIn({ userToken: user.Session });
+      
         }
       }
     } catch (error) {
@@ -36,6 +38,7 @@ const LoginScreen = () => {
     try {
       const loggedUser = await Auth.completeNewPassword(userWithChallenge, newPassword);
       console.log(loggedUser);
+      setUsername(username)
       signIn({ userToken: userWithChallenge.Session });
     } catch (error) {
       Alert.alert('OOPSS', error.message);
