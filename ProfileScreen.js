@@ -7,9 +7,9 @@ import { GlobalContext } from './GlobalContext';
 import 'core-js/full/symbol/async-iterator';
 
 import { SQLiteAdapter } from '@aws-amplify/datastore-storage-adapter/SQLiteAdapter';
-import { Statisticx,Todo } from './src/models';
+import { Statisticx, Todo } from './src/models';
 import { DataStore, Predicates } from "@aws-amplify/datastore";
- 
+
 import { API, graphqlOperation } from 'aws-amplify';
 import { createTodo, updateTodo, deleteTodo } from './graphql/mutations';
 import config from './src/aws-exports';
@@ -20,9 +20,9 @@ import config from './src/aws-exports';
 
 
 
-function ProfileScreen() { 
+function ProfileScreen() {
   // Calculate and save data every 5 seconds
- 
+
   const { signOut } = React.useContext(AuthContext);
   // const [answers, setAnswers] = useLocalStorage('answers', []);
   const { answers, setAnswers } = useContext(GlobalContext);
@@ -37,38 +37,38 @@ function ProfileScreen() {
   const [currentSavingValueText, setcurrentSavingValueText] = useState('calculating...', '');
   const [currentTotalValueText, setcurrentTotalValueText] = useState('calculating...', '');
 
- 
+
 
   const [username, setUsername] = useLocalStorage('username', '');
 
 
-// useEffect(()=>{
-//   calculateValues();
-// },[savingValue,totalValue,currentSavingValue,currentTotalValue]);
+  // useEffect(()=>{
+  //   calculateValues();
+  // },[savingValue,totalValue,currentSavingValue,currentTotalValue]);
 
-useEffect(() => {
-  const interval = setInterval(() => {
-     calculateValues();
-  }, 5000); // Change tip every 20 seconds
+  useEffect(() => {
+    const interval = setInterval(() => {
+      calculateValues();
+    }, 5000); // Change tip every 20 seconds
 
-  return () => {
-    clearInterval(interval); // Clear the interval when the component unmounts
-  };
-}, [savingValue,totalValue,savingValueStoredToCloud,totalValueStoredToCloud,username,currentSavingValue,currentTotalValue,answers]);
+    return () => {
+      clearInterval(interval); // Clear the interval when the component unmounts
+    };
+  }, [savingValue, totalValue, savingValueStoredToCloud, totalValueStoredToCloud, username, currentSavingValue, currentTotalValue, answers]);
 
   const calculateValues = () => {
 
 
 
     let currentTotalValue = 0;
-      let currentSavingValue = 0;
+    let currentSavingValue = 0;
 
     answers.forEach((answer) => {
       currentTotalValue += answer.total;
       currentSavingValue += answer.saving;
     });
-//  console.log("currentTotalValue",currentTotalValue);
-//  console.log("currentSavingValue",currentSavingValue);
+    //  console.log("currentTotalValue",currentTotalValue);
+    //  console.log("currentSavingValue",currentSavingValue);
     setcurrentTotalValue(currentTotalValue);
     setcurrentSavingValue(currentSavingValue);
 
@@ -76,7 +76,7 @@ useEffect(() => {
     let comparisonText = '';
 
     if (currentSavingValue > savingValue && savingValue > 0) {
-     
+
       let compSaving = (currentSavingValue - savingValue) / savingValue * 100;
       comparisonText = 'You have increased saved water by !' + compSaving.toFixed(2) + "%";
       setcurrentSavingValueText(comparisonText)
@@ -86,7 +86,7 @@ useEffect(() => {
 
 
     if (currentTotalValue < totalValue) {
-     
+
       let compTotal = (totalValue - currentTotalValue) / totalValue * 100;
       comparisonText = 'You have decreased water footprint by !' + compTotal.toFixed(2) + "%";
       setcurrentTotalValueText(comparisonText)
@@ -96,37 +96,37 @@ useEffect(() => {
 
 
     //console.log("no db",totalValue , totalValueStoredToCloud , savingValue, savingValueStoredToCloud,currentSavingValue, currentTotalValue)
-    if(currentTotalValue != totalValueStoredToCloud || currentSavingValue != savingValueStoredToCloud){
-      console.log("go to db",totalValue , totalValueStoredToCloud , savingValue, savingValueStoredToCloud);
+    if (currentTotalValue != totalValueStoredToCloud || currentSavingValue != savingValueStoredToCloud) {
+      console.log("go to db", totalValue, totalValueStoredToCloud, savingValue, savingValueStoredToCloud);
       saveUserDataToAttributes();
-    }else{
-      console.log("no db",totalValue , totalValueStoredToCloud , savingValue, savingValueStoredToCloud,currentSavingValue, currentTotalValue)
+    } else {
+      console.log("no db", totalValue, totalValueStoredToCloud, savingValue, savingValueStoredToCloud, currentSavingValue, currentTotalValue)
     }
 
 
   };
 
- 
 
- 
+
+
 
   const saveUserDataToAttributes = async () => {
 
- 
+
     try {
-      console.log("usernamex",username)
-  if(username ==="" || username ==="-"){
-    console.log('user name not retrived');
-    return;
-  }
-     //  console.log('Post saved successfully!',r);
-     const currentTime = new Date().toISOString();
- 
-      const posts = await DataStore.query(Statisticx,(c)=> c.username.eq (username));
-      if(posts.length >0){
+      console.log("usernamex", username)
+      if (username === "" || username === "-") {
+        console.log('user name not retrived');
+        return;
+      }
+      //  console.log('Post saved successfully!',r);
+      const currentTime = new Date().toISOString();
+
+      const posts = await DataStore.query(Statisticx, (c) => c.username.eq(username));
+      if (posts.length > 0) {
         const updatedUserData = posts[0];
-      
-  
+
+
         const updatedPost = await DataStore.save(
           Statisticx.copyOf(updatedUserData, updated => {
             //updated.savedvalue = savingValue;
@@ -134,16 +134,16 @@ useEffect(() => {
             updated.currerntsavedvalue = currentSavingValue;
             updated.currentotalvalue = currentTotalValue;
             updated.lastupdatetime = currentTime;
-            updated.visitcount =  updatedUserData.visitcount+1;
+            updated.visitcount = updatedUserData.visitcount + 1;
           })
         );
         console.log('User data updated successfully!', updatedPost);
-     
+
         setTotalValueStoredToCloud(currentTotalValue);
         setSavingValueStoredToCloud(currentSavingValue);
 
-      }else{
-        const r= await DataStore.save(
+      } else {
+        const r = await DataStore.save(
           new Statisticx({
             "username": username,
             "savedvalue": savingValue,
@@ -188,126 +188,138 @@ useEffect(() => {
           </View>
 
         </>) : (<>
-          <View style={styles.infoRow}>
+
+
+          {/* <View style={styles.infoRow}>
             <Text style={styles.infoText}>You saved</Text>
             <Text style={styles.infoValue}>{savingValue} L</Text>
             <Text style={styles.infoText}>water!</Text>
-          </View></>)}
-
-
-        {currentTotalValueText !== '' ? (<>
+          </View> */}
 
           <View style={styles.infoRow}>
-            <Text style={styles.infoText}>Your water footprint</Text>
-            <Text style={styles.infoValue}>{currentTotalValue} L!</Text>
+            <Text style={styles.infoText}>Your saved</Text>
+            <Text style={[styles.infoValue, { color: currentSavingValue >= 0 ? 'green' : 'red' }]}>
+              {currentSavingValue >= 0 ? currentSavingValue + ' L' : '0'}
+             </Text>
+            <Text style={styles.infoText}> water!</Text>
+          </View></>
+
+          )}
+
+
+          {currentTotalValueText !== '' ? (<>
+
+            <View style={styles.infoRow}>
+              <Text style={styles.infoText}>Your water footprint</Text>
+              <Text style={styles.infoValue}>{currentTotalValue} L!</Text>
+            </View>
+          </>) : (<>
+
+            <View style={styles.infoRow}>
+              <Text style={styles.infoText}>Your water footprint</Text>
+              <Text style={styles.infoValue}>{totalValue} L!</Text>
+            </View>
+
+          </>)}
+
+
+          <View style={styles.infoRow}>
+            <Text style={styles.infoText}>Istanbul dam fill rate </Text>
+            <Text style={styles.infoValue}>95%</Text>
           </View>
-        </>) : (<>
+          {currentSavingValueText !== '' ? (<><View style={styles.infoRow}>
+            <Text style={styles.infoText}>{currentSavingValueText} </Text>
 
-          <View style={styles.infoRow}>
-            <Text style={styles.infoText}>Your water footprint</Text>
-            <Text style={styles.infoValue}>{totalValue} L!</Text>
           </View>
+          </>) : (<></>)}
+          {currentTotalValueText !== '' ? (<>
+            <View style={styles.infoRow}>
 
-        </>)}
-
-
-        <View style={styles.infoRow}>
-          <Text style={styles.infoText}>Istanbul dam fill rate </Text>
-          <Text style={styles.infoValue}>95%</Text>
+              <Text style={styles.infoText}>{currentTotalValueText} </Text>
+            </View></>) : (<></>)}
         </View>
-        {currentSavingValueText !== '' ? (<><View style={styles.infoRow}>
-          <Text style={styles.infoText}>{currentSavingValueText} </Text>
-
-        </View>
-        </>) : (<></>)}
-        {currentTotalValueText !== '' ? (<>
-          <View style={styles.infoRow}>
-
-            <Text style={styles.infoText}>{currentTotalValueText} </Text>
-          </View></>) : (<></>)}
-      </View>
 
 
 
 
-    
-     
-      {/* <TouchableOpacity style={styles.signOutButton} onPress={saveUserDataToAttributes}>
+
+
+        {/* <TouchableOpacity style={styles.signOutButton} onPress={saveUserDataToAttributes}>
         <Text style={styles.signOutButtonText}>Submit my data to dashboard</Text>
       </TouchableOpacity> */}
-      <Text style={styles.signOutButtonText}></Text>
-      <TouchableOpacity style={styles.signOutButton} onPress={signOut}>
-        <Text style={styles.signOutButtonText}>Sign Out</Text>
-      </TouchableOpacity>
-    </View>
-  );
+        <Text style={styles.signOutButtonText}></Text>
+        <TouchableOpacity style={styles.signOutButton} onPress={signOut}>
+          <Text style={styles.signOutButtonText}>Sign Out</Text>
+        </TouchableOpacity>
+      </View>
+      );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#f5f5f5',
-    padding: 20,
+      const styles = StyleSheet.create({
+        container: {
+        flex: 1,
+      justifyContent: 'center',
+      alignItems: 'center',
+      backgroundColor: '#f5f5f5',
+      padding: 20,
   },
-  header: {
-    marginBottom: 40,
+      header: {
+        marginBottom: 40,
   },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#333',
+      title: {
+        fontSize: 24,
+      fontWeight: 'bold',
+      color: '#333',
   },
-  username: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#3498db',
+      username: {
+        fontSize: 24,
+      fontWeight: 'bold',
+      color: '#3498db',
   },
-  waterDropContainer: {
-    alignItems: 'center',
-    marginBottom: 30,
+      waterDropContainer: {
+        alignItems: 'center',
+      marginBottom: 30,
   },
-  waterDropImage: {
-    width: 120,
-    height: 120,
+      waterDropImage: {
+        width: 120,
+      height: 120,
   },
-  savingValue: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginTop: 10,
-    color: '#333',
+      savingValue: {
+        fontSize: 24,
+      fontWeight: 'bold',
+      marginTop: 10,
+      color: '#333',
   },
-  infoContainer: {
-    marginBottom: 30,
-    width: '100%',
+      infoContainer: {
+        marginBottom: 30,
+      width: '100%',
   },
-  infoRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 10,
+      infoRow: {
+        flexDirection: 'row',
+      alignItems: 'center',
+      marginBottom: 10,
   },
-  infoText: {
-    fontSize: 18,
-    color: '#666',
-    marginRight: 10,
+      infoText: {
+        fontSize: 18,
+      color: '#666',
+      marginRight: 10,
   },
-  infoValue: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
+      infoValue: {
+        fontSize: 18,
+      fontWeight: 'bold',
+      color: '#333',
   },
-  signOutButton: {
-    backgroundColor: '#e74c3c',
-    paddingVertical: 15,
-    paddingHorizontal: 30,
-    borderRadius: 10,
+      signOutButton: {
+        backgroundColor: '#e74c3c',
+      paddingVertical: 15,
+      paddingHorizontal: 30,
+      borderRadius: 10,
   },
-  signOutButtonText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#fff',
+      signOutButtonText: {
+        fontSize: 18,
+      fontWeight: 'bold',
+      color: '#fff',
   },
 });
 
-export default ProfileScreen;
+      export default ProfileScreen;

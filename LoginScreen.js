@@ -51,7 +51,7 @@ const forgotPasswordSubmit = async()=> {
     const data = await Auth.forgotPasswordSubmit(username, code, password);
     console.log(data);
     Alert.alert('DONE!', 'Pass changed');
-    setResetPassword(true);
+    setResetPassword(false);
   } catch(err) {
     Alert.alert('OOPSS', err.message);
   }
@@ -61,6 +61,7 @@ const forgotPasswordSubmit = async()=> {
     try {
       await Auth.forgotPassword(username); // Initiate password reset for the provided username
       setResetPassword(true); // Set the reset password state to true
+
     } catch (error) {
       Alert.alert('OOPSS', error.message);
     }
