@@ -1,4 +1,4 @@
- 
+ //The categories
 const tasks = [
  
   { id: 1, name: 'Clean bathroom', category: 'Shower' },

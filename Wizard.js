@@ -157,7 +157,7 @@ const Wizard = () => {
   };
 
 
- 
+
 
   const saveAnswers = async () => {
     try {
@@ -210,7 +210,7 @@ const Wizard = () => {
             updated.currerntsavedvalue = savingValue;
             updated.currentotalvalue = totalValue;
             updated.lastupdatetime = currentTime;
-            updated.startdate =currentTime;
+            updated.startdate = currentTime;
             updated.visitcount = 1;
           })
         );
@@ -234,7 +234,7 @@ const Wizard = () => {
 
       }
       console.log('Posts retrieved successfully!', JSON.stringify(posts, null, 2));
-return true;
+      return true;
 
     } catch (error) {
       console.log('Error :', error);
@@ -251,7 +251,7 @@ return true;
       {questionIndex < questionsw.length ? (
         <View>
 
-          <Text style={styles.questionText}>{currentQuestion.text}</Text>
+          <Text style={styles.questionText}>{currentQuestion.text} </Text>
 
           <View style={styles.optionsContainer}>
             {currentQuestion?.options?.map((option, index) => (
@@ -304,28 +304,32 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center',
-    padding: 30,
+    justifyContent: 'flex-start', // Align to the top
+    padding: 10,
+    width: '100%', // Ensure it takes the full width
+    height: '100%', // Ensure it takes the full height
   },
   questionText: {
     fontSize: 22,
     margin: 10,
     textAlign: 'center',
+    alignSelf: 'flex-start', // Align to the left
   },
   optionsContainer: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    margin: 10,
     width: '100%',
   },
   optionButton: {
     backgroundColor: '#3498db',
-    padding: 20,
-    margin: 10,
-    borderRadius: 10,
-    width: '70%',
+    height: 50, // Fixed height for buttons
+    margin: 20,
+    padding:5,
+    borderRadius: 5,
+    width: '90%',
     alignItems: 'center',
+    justifyContent: 'center', // Vertically center the text inside the button
   },
   optionText: {
     color: 'white',

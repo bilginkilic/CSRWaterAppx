@@ -71,6 +71,7 @@ const SubSurvey = ({ navigation, route }) => {
   return (
     <View style={styles.container}>
       <Text style={styles.questionText}>{question.text}</Text>
+      <Text style={styles.contentText}>{question.content.message}</Text>
       {question.options.map((option, index) => (
         <TouchableOpacity
           key={index}
@@ -80,16 +81,12 @@ const SubSurvey = ({ navigation, route }) => {
           ]}
           onPress={() => handleOptionSelection(option.text, option)}
         >
-          <Text style={styles.optionText}>{option.text}</Text>
+          <Text style={styles.optionText}>{option.text}  </Text>
         </TouchableOpacity>
+        
       ))}
-      {/* <TouchableOpacity
-        style={styles.completeButton}
-        onPress={handleCompleteSubSurvey}
-        disabled={!selectedOption}
-      >
-        <Text style={styles.completeButtonText}>Complete</Text>
-      </TouchableOpacity> */}
+       
+   
     </View>
   );
 };
@@ -104,7 +101,18 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    padding:10
   },
+  contentText: {
+    fontSize: 22,
+    fontStyle: 'italic',
+    padding: 10,
+    marginBottom: 20,
+    
+    borderBottomWidth: 2,
+    borderBottomColor: 'gray'
+}
+,
   optionButton: {
     borderWidth: 1,
     borderColor: '#ccc',

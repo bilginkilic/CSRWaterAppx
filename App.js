@@ -11,7 +11,8 @@ import { useLocalStorage } from './useLocalStorage';
 import TaskToFinale from './TaskToFinale';
 import MyAchivements from './MyAchivements';
 import TaskOptions from './TaskOptions';
-import SubSurvey from './SubSurvey'
+import SubSurvey from './SubSurvey';
+import MiddleScreen from './MiddleScreen';
 import { GlobalProvider, GlobalContext } from './GlobalContext';
 import { withAuthenticator } from "aws-amplify-react"
 
@@ -165,7 +166,7 @@ function App() {
                     name="MainScreenToFinale"
                     component={MainScreenToFinale}
                     options={{
-                      title: 'WATER APP',
+                      title: 'WaterApp',
                     }}
                   />
 
@@ -178,7 +179,12 @@ function App() {
                   <Stack.Screen name="TaskOptions" component={TaskOptions} options={{
                     title: 'Choose a task to do!',
                   }} />
-                  <Stack.Screen name="SubSurvey" component={SubSurvey} />
+                  <Stack.Screen name="SubSurvey" component={SubSurvey} options={{
+                    title: 'become more conscious?',
+                  }} />
+                  <Stack.Screen name="MiddleScreen" component={MiddleScreen} options={{
+                    title: 'Training...',
+                  }} />
                 </Stack.Group>
 
                 : <Stack.Group>
@@ -186,7 +192,7 @@ function App() {
                     name="Main"
                     component={MainScreen}
                     options={{
-                      title: 'WELCOME TO WATER APP',
+                      title: 'WATER APP',
                     }}
                   />
                   <Stack.Screen name="TaskToFinale" component={TaskToFinale} />
