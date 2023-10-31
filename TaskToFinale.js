@@ -185,8 +185,7 @@ const TaskToFinale = () => {
   return (
     
       <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.title}>Tasks to Complete</Text>
-
+      
       { selectedTasks.length > 0 ? ( selectedTasks.map((task) => (
         <TouchableOpacity
           key={task.questionid}

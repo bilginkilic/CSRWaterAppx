@@ -171,7 +171,7 @@ function App() {
                   />
 
                   <Stack.Screen name="TaskToFinale" component={TaskToFinale} options={{
-                    title: 'Check your task',
+                    title: 'Complete your tasks',
                   }} />
                   <Stack.Screen name="MyAchivements" component={MyAchivements} options={{
                     title: 'The Achivements',
