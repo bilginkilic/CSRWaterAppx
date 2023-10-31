@@ -63,18 +63,18 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   button: {
-    backgroundColor: '#9de3a7',
+    backgroundColor: 'red',
     borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderWidth: 2,
-    borderColor: '#0e6645',
+    borderColor: 'white',
     marginHorizontal: 10,
   },
   buttonText: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 16,
+    fontSize: 18,
     textAlign: 'center',
   },
   tipContainer: {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     marginTop: 50,
   },
   tipBubble: {
-    backgroundColor: '#8ac6d1',
+    backgroundColor: '#87CEEB',
     borderRadius: 20,
     padding: 20,
     maxWidth: 300,

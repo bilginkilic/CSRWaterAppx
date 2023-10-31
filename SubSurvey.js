@@ -52,7 +52,8 @@ const SubSurvey = ({ navigation, route }) => {
         setSelectedTasks(updatedTasks);
 
       }
-      navigation.goBack(); // Go back to the previous screen
+     // navigation.goBack(); // Go back to the previous screen
+     navigation.navigate('TaskToFinale');
     }else{
       showAlert();
       navigation.goBack(); 
@@ -70,8 +71,9 @@ const SubSurvey = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
+          <Text style={styles.contentText}>{question.content.message}</Text>
       <Text style={styles.questionText}>{question.text}</Text>
-      <Text style={styles.contentText}>{question.content.message}</Text>
+  
       {question.options.map((option, index) => (
         <TouchableOpacity
           key={index}

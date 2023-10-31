@@ -258,8 +258,8 @@ function ProfileScreen() {
       const styles = StyleSheet.create({
         container: {
         flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+      justifyContent: 'flex-start',
+      alignItems: 'flex-start',
       backgroundColor: '#f5f5f5',
       padding: 20,
   },
@@ -316,7 +316,7 @@ function ProfileScreen() {
       borderRadius: 10,
   },
       signOutButtonText: {
-        fontSize: 18,
+        fontSize: 14,
       fontWeight: 'bold',
       color: '#fff',
   },
