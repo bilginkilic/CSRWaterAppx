@@ -1,23 +1,32 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, Linking } from 'react-native';
 
-const MiddleScreen = ({ navigation ,route}) => {
-
-  
-        const taksQuestion = route.params;
+const MiddleScreen = ({ navigation, route }) => {
+  const taskQuestion = route.params;
 
   const handleGoBack = () => {
     navigation.goBack();
   };
 
   const handleContinue = () => {
-    navigation.navigate('SubSurvey',taksQuestion); // This assumes you'll navigate to SubSurvey after this.
+    navigation.navigate('SubSurvey', taskQuestion);
+  };
+
+  const handleOpenLink = () => {
+    const url = taskQuestion.content.video; // Replace with your actual URL
+    Linking.openURL(url).catch(err => console.error("Couldn't load page", err));
   };
 
   return (
     <View style={styles.container}>
       <View style={styles.infoBox}>
-        <Text style={styles.infoText}>{taksQuestion.trainingText}</Text>
+        <Text style={styles.infoText}>{taskQuestion.trainingText}</Text>
+        <Text style={styles.infoText}>{taskQuestion.content.additionalInfo}</Text>
+        <TouchableOpacity onPress={handleOpenLink} style={styles.linkButton}>
+        
+          <Text >{taskQuestion.content.image}</Text>
+          <Text style={styles.linkText}>Learn more</Text>
+        </TouchableOpacity>
       </View>
       <TouchableOpacity onPress={handleGoBack} style={styles.goBackButton}>
         <Text style={styles.buttonText}>Give me time</Text>
@@ -33,20 +42,27 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: 'center',
-   
-    justifyContent: 'flex-start', // Align to the top
-    padding: 20
+    justifyContent: 'flex-start',
+    padding: 20,
   },
   infoBox: {
     width: '100%',
     padding: 20,
     borderWidth: 1,
     borderColor: '#ccc',
-    marginBottom: 20
+    marginBottom: 20,
   },
   infoText: {
     fontSize: 16,
-    color: '#333'
+    color: '#333',
+  },
+  linkButton: {
+    marginTop: 10,
+  },
+  linkText: {
+    fontSize: 16,
+    color: '#0645AD', // A color that is commonly used for links
+    textDecorationLine: 'underline',
   },
   goBackButton: {
     padding: 10,
@@ -54,20 +70,20 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 10,
     width: '100%',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   continueButton: {
     padding: 10,
     backgroundColor: '#87CEEB',
     borderRadius: 5,
     width: '100%',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   buttonText: {
     fontSize: 16,
     color: '#fff',
-    fontWeight: 'bold'
-  }
+    fontWeight: 'bold',
+  },
 });
 
 export default MiddleScreen;
