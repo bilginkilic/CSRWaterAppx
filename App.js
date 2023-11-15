@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -14,16 +15,16 @@ import TaskOptions from './TaskOptions';
 import SubSurvey from './SubSurvey';
 import MiddleScreen from './MiddleScreen';
 import { GlobalProvider, GlobalContext } from './GlobalContext';
-import { withAuthenticator } from "aws-amplify-react"
 
-import { Amplify } from 'aws-amplify';
-import config from './src/aws-exports';
-Amplify.configure(config);
+ 
 
+
+ 
 
 const Stack = createStackNavigator();
 
 function App() {
+ 
 
   const [username, setUsername] = useLocalStorage('username', '');
   const [hasSurvey, setHasSurvey] = useLocalStorage('hasSurvey', false);

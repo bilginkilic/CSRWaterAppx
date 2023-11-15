@@ -190,7 +190,7 @@ const Wizard = () => {
 
     try {
       console.log("usernamex", username)
-      if (username === "" || username === "-") {
+      if (username === "" || username === "-"|| username.trim() === "") {
         console.log('user name not retrived');
         return false;
       }
@@ -219,6 +219,10 @@ const Wizard = () => {
 
 
       } else {
+        if (username === "" || username === "-" || username.trim() === "") {
+          console.log('user name not retrived');
+          return;
+        }
         const r = await DataStore.save(
           new Statisticx({
             "username": username,
