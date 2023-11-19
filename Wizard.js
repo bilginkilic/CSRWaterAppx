@@ -1,38 +1,31 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
-import { AsyncStorage } from 'react-native';
+import React, { useState, useEffect, useContext, useRef } from 'react';
+import { View, Text, TouchableOpacity, StyleSheet,Image, Animated, AsyncStorage } from 'react-native';
 import { AuthContext } from './AuthContext';
 import { useLocalStorage } from './useLocalStorage';
 import { GlobalContext } from './GlobalContext';
+import questionsw from './questionsData';
 import { Statisticx, Todo } from './src/models';
 import { DataStore, Predicates } from "@aws-amplify/datastore";
-import questionsw from './questionsData'
 
 const Wizard = () => {
-  const { takeTest } = React.useContext(AuthContext);
+  const { takeTest } = useContext(AuthContext);
   const [questionIndex, setQuestionIndex] = useLocalStorage('questionIndex', 0);
-  //const [answers, setAnswers] = useLocalStorage('answers', []);
-  const [hasSurvey, setHasSurvey] = useLocalStorage('hasSurvey', false);
   const { answers, setAnswers } = useContext(GlobalContext);
   const [savingValue, setSavingValue] = useLocalStorage('savingValue', 0);
   const [totalValue, setTotalValue] = useLocalStorage('totalValue', 0);
   const [username, setUsername] = useLocalStorage('username', '');
-
-
-  
-
+  const progress = useRef(new Animated.Value(0)).current;
+  const [hasSurvey, setHasSurvey] = useLocalStorage('hasSurvey', false);
+ 
   useEffect(() => {
-
     const loadData = async () => {
       try {
         const answersJson = await AsyncStorage.getItem('answers');
         if (answersJson) {
-          const answers = JSON.parse(answersJson);
-          setAnswers(answers);
-          setQuestionIndex(answers.length);
+          const storedAnswers = JSON.parse(answersJson);
+          setAnswers(storedAnswers);
+          setQuestionIndex(storedAnswers.length);
         }
-
-
       } catch (error) {
         console.error(error);
       }
@@ -40,7 +33,6 @@ const Wizard = () => {
 
     loadData();
   }, []);
-
 
   const handleSelectOption = (question, opt) => {
     setAnswers([
@@ -160,14 +152,38 @@ const Wizard = () => {
 
 
 
+  useEffect(() => {
+    // Update progress when questionIndex changes
+    const newProgress = (questionIndex / questionsw.length) * 100;
+    Animated.timing(progress, {
+      toValue: newProgress,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+  }, [questionIndex, questionsw.length, progress]);
+
+  
   const currentQuestion = questionsw[questionIndex];
+
   return (
     <View style={styles.container}>
+     <View style={styles.progressBarContainer}>
+      <Animated.View 
+        style={[
+          styles.progressBar, 
+          { 
+            width: progress.interpolate({
+              inputRange: [0, 100],
+              outputRange: ['0%', '100%']
+            }) 
+          }
+        ]} 
+      />
+    </View>
+
       {questionIndex < questionsw.length ? (
-        <View>
-
-          <Text style={styles.questionText}>{currentQuestion.text} </Text>
-
+        <View style={styles.card}>
+          <Text style={styles.questionText}>{currentQuestion.text}</Text>
           <View style={styles.optionsContainer}>
             {currentQuestion?.options?.map((option, index) => (
               <TouchableOpacity
@@ -175,40 +191,40 @@ const Wizard = () => {
                 style={styles.optionButton}
                 onPress={() => handleSelectOption(currentQuestion, option)}
               >
-                <Text style={styles.optionText}>{option?.text}</Text>
+                <Text style={styles.optionText}>{option.text}</Text>
               </TouchableOpacity>
             ))}
           </View>
         </View>
       ) : (
         <View>
-          <View style={styles.waterDropContainer}>
-            <Image source={require('./images/category/drop.png')} style={styles.waterDropImage} />
+        <View style={styles.waterDropContainer}>
+          <Image source={require('./images/category/drop.png')} style={styles.waterDropImage} />
 
-          </View>
-
-          <View style={styles.infoContainer}>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoText}>You saved</Text>
-              <Text style={styles.infoValue}>{savingValue} L</Text>
-              <Text style={styles.infoText}>water!</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoText}>Your water footprint</Text>
-              <Text style={styles.infoValue}>{totalValue} L!</Text>
-            </View>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoText}>Istanbul dam fill rate </Text>
-              <Text style={styles.infoValue}>95%</Text>
-            </View>
-          </View>
-
-
-          <Text style={styles.finalText}>Thank you for taking the survey!!!</Text>
-          <TouchableOpacity style={styles.saveButton} onPress={saveAnswers}>
-            <Text style={styles.saveButtonText}>Submit</Text>
-          </TouchableOpacity>
         </View>
+
+        <View style={styles.infoContainer}>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoText}>You saved</Text>
+            <Text style={styles.infoValue}>{savingValue} L</Text>
+            <Text style={styles.infoText}>water!</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoText}>Your water footprint</Text>
+            <Text style={styles.infoValue}>{totalValue} L!</Text>
+          </View>
+          <View style={styles.infoRow}>
+            <Text style={styles.infoText}>Istanbul dam fill rate </Text>
+            <Text style={styles.infoValue}>95%</Text>
+          </View>
+        </View>
+
+
+        <Text style={styles.finalText}>Thank you for taking the survey!!!</Text>
+        <TouchableOpacity style={styles.saveButton} onPress={saveAnswers}>
+          <Text style={styles.saveButtonText}>Submit</Text>
+        </TouchableOpacity>
+      </View>
       )}
     </View>
   );
@@ -219,37 +235,62 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'flex-start', // Align to the top
+    justifyContent: 'flex-start',
     padding: 10,
-    width: '100%', // Ensure it takes the full width
-    height: '100%', // Ensure it takes the full height
+    width: '100%',
+    height: '100%',
   },
   questionText: {
     fontSize: 22,
     margin: 10,
     textAlign: 'center',
-    alignSelf: 'flex-start', // Align to the left
   },
   optionsContainer: {
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center',
-    width: '100%',
+    width: '100%', // Ensure options container takes full width of the card
   },
   optionButton: {
     backgroundColor: '#3498db',
-    height: 50, // Fixed height for buttons
-    margin: 20,
-    padding:5,
+    height: 50,
+    marginVertical: 10,
+    paddingHorizontal: 20,
     borderRadius: 5,
-    width: '90%',
+    width: '90%', // Consistent width for all buttons
     alignItems: 'center',
-    justifyContent: 'center', // Vertically center the text inside the button
+    justifyContent: 'center',
   },
   optionText: {
     color: 'white',
     fontSize: 18,
     fontWeight: 'bold',
+    textAlign: 'center', // Center the text for better visual appearance
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    marginVertical: 10,
+    width: '95%', // Set a max width for the card
+    maxWidth: 500, // Maximum width can be adjusted as needed
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+    alignSelf: 'center', // Ensure card is always centered
+  },
+  progressBarContainer: {
+    width: '100%',
+    height: 20,
+    backgroundColor: '#e0e0e0',
+    borderRadius: 10,
+  },
+  progressBar: {
+    height: '100%',
+    borderRadius: 10,
+    backgroundColor: '#3498db',
   },
   finalText: {
     fontSize: 22,
