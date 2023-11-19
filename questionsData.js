@@ -99,7 +99,7 @@ const questions =[
         { text: 'Yes', valueSaving: 2, valueTotal: 2, task: 'You saved 10 liters for your each brush , congratulations!', category: 'Daily activities', type: 'Achievement' },
         { text: 'No', valueSaving: 0, valueTotal: 4, task: 'Turn off the water and save 10 liters more for your each brush, take the necessary action!', category: 'Daily activities', type: 'Task' },
       ],
-      trainingText: 'Washing half loads frequently can lead to more water usage over time.',
+      trainingText: 'Turning on the water while you brush your teeth can lead to more water usage over time.',
       content: {
         message: 'Did you know - if you turn off the tap everytime  while brushing your teeth, you could save around 12 litres of water.',
         image: 'a reference source from waterwise:',

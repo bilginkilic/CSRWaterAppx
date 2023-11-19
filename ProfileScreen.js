@@ -168,6 +168,7 @@ function ProfileScreen() {
 
   return (
     <View style={styles.container}>
+    <View style={styles.card}>
       <View style={styles.header}>
         <Text style={styles.title}>Hi, Welcome</Text>
         <Text style={styles.username}>{username}!</Text>
@@ -252,17 +253,34 @@ function ProfileScreen() {
         <Text style={styles.signOutButtonText}>Sign Out</Text>
       </TouchableOpacity>
     </View>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '#f5f5f5',
     padding: 20,
   },
+  card: {
+    backgroundColor: '#fff', // A light color for the card
+    borderRadius: 20, // Rounded corners
+    shadowColor: '#000', // Shadow for depth
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+    elevation: 5, // Elevation for Android
+    width: '100%', // Adjust as needed
+    maxWidth: 500, // Maximum width for larger devices
+    padding: 20, // Inner padding
+  },
+   
   header: {
     marginBottom: 40,
   },
