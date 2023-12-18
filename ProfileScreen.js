@@ -224,10 +224,10 @@ function ProfileScreen() {
         </>)}
 
 
-        <View style={styles.infoRow}>
+        {/* <View style={styles.infoRow}>
           <Text style={styles.infoText}>Istanbul dam fill rate </Text>
           <Text style={styles.infoValue}>95%</Text>
-        </View>
+        </View> */}
         {currentSavingValueText !== '' ? (<><View style={styles.infoRow}>
           <Text style={styles.infoText}>{currentSavingValueText} </Text>
 

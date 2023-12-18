@@ -213,10 +213,10 @@ const Wizard = () => {
             <Text style={styles.infoText}>Your water footprint</Text>
             <Text style={styles.infoValue}>{totalValue} L!</Text>
           </View>
-          <View style={styles.infoRow}>
+          {/* <View style={styles.infoRow}>
             <Text style={styles.infoText}>Istanbul dam fill rate </Text>
             <Text style={styles.infoValue}>95%</Text>
-          </View>
+          </View> */}
         </View>
 
 
